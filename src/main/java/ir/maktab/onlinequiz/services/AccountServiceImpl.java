@@ -16,12 +16,16 @@ import ir.maktab.onlinequiz.models.Teacher;
 import ir.maktab.onlinequiz.outcome.LoginToAccountOutcome;
 import ir.maktab.onlinequiz.outcome.RegisterAccountOutcome;
 import ir.maktab.onlinequiz.specification.AccountSpecification;
+import org.hibernate.internal.util.config.ConfigurationHelper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -48,10 +52,19 @@ public class AccountServiceImpl implements AccountService {
         if (accountDao.findByUsername(registerAccountDto.getUsername()).isPresent())
             throw new UsernameExistInSystemException("کاربری با این نام کاربری در سیستم وجود دارد!");
         Person person = new Person();
-        if (registerAccountDto.getRole().equals("ROLE_STUDENT"))
-            person = new Student();
-        else if (registerAccountDto.getRole().equals("ROLE_TEACHER"))
-            person = new Teacher();
+        String code = "" + LocalDate.now().getYear() + LocalDate.now().getMonth().getValue() +
+                LocalDate.now().getDayOfMonth() + LocalTime.now().getHour() +
+                LocalTime.now().getMinute() + LocalTime.now().getSecond();
+
+        if (registerAccountDto.getRole().equals("ROLE_STUDENT")) {
+            Student student = new Student();
+            student.setStudentCode("S_" + code);
+            person = student;
+        } else if (registerAccountDto.getRole().equals("ROLE_TEACHER")) {
+            Teacher teacher = new Teacher();
+            teacher.setTeacherCode("T_" + code);
+            person = teacher;
+        }
         Account account = accountDao.save(
                 new Account(
                         null,

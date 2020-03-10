@@ -33,6 +33,10 @@ function loadPage(page) {
     if (page === 'lessons-list') {
         $('#app-content-load').load('/components/panels/manager/lesson-management/lessons-list.html');
     }
+
+    if (page === 'teacher-management') {
+        $('#app-content-load').load('/components/panels/manager/user-management/teacher-management/teacher-management.html');
+    }
 }
 
 function getSecondPart(str) {

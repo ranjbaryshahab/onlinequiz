@@ -1,10 +1,7 @@
 package ir.maktab.onlinequiz.controllers;
 
 import ir.maktab.onlinequiz.dto.*;
-import ir.maktab.onlinequiz.exceptions.UsernameExistInSystemException;
-import ir.maktab.onlinequiz.models.Account;
 import ir.maktab.onlinequiz.models.Lesson;
-import ir.maktab.onlinequiz.outcome.RegisterAccountOutcome;
 import ir.maktab.onlinequiz.services.LessonService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,7 +20,7 @@ public class LessonController {
     }
 
     @PostMapping("/manager/lesson/create")
-    private Lesson createLesson(@RequestBody LessonDto lessonDto) {
+    private Lesson createLesson(@RequestBody LessonDTO lessonDto) {
         return lessonService.createLesson(lessonDto);
     }
 
@@ -33,12 +30,12 @@ public class LessonController {
     }
 
     @PostMapping("/manager/lesson/edit")
-    private Lesson editLesson(@RequestBody LessonDto lessonDto) {
+    private Lesson editLesson(@RequestBody LessonDTO lessonDto) {
         return lessonService.editLesson(lessonDto);
     }
 
     @PostMapping("/manager/lesson/delete-all-selected")
-    private void deleteAllSelected(@RequestBody LessonsIdsListDto lessonsIdsListDto) {
+    private void deleteAllSelected(@RequestBody LessonsIdsListDTO lessonsIdsListDto) {
         lessonService.deleteAllSelected(lessonsIdsListDto.getListId()
                 .stream()
                 .map(Long::parseLong)
@@ -51,7 +48,7 @@ public class LessonController {
     }
 
     @PostMapping("/manager/lesson/search/{pageNo}/{pageSize}")
-    private Page<Lesson> search(@RequestBody LessonDto lessonDto, @PathVariable int pageNo, @PathVariable int pageSize) {
+    private Page<Lesson> search(@RequestBody LessonDTO lessonDto, @PathVariable int pageNo, @PathVariable int pageSize) {
         return lessonService.lessonSearch(lessonDto, PageRequest.of(pageNo, pageSize));
     }
 }

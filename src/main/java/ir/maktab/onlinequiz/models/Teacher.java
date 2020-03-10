@@ -20,6 +20,8 @@ public class Teacher extends Person {
 
     private String teacherCode;
 
+    private Boolean activeCourse;
+
     @OneToMany(mappedBy = "teacher")
     private Set<Course> courses;
 }

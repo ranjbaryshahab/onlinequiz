@@ -1,9 +1,7 @@
 package ir.maktab.onlinequiz.services;
 
 import ir.maktab.onlinequiz.dao.LessonDAO;
-import ir.maktab.onlinequiz.dto.LessonDto;
-import ir.maktab.onlinequiz.enums.AccountStatus;
-import ir.maktab.onlinequiz.models.Account;
+import ir.maktab.onlinequiz.dto.LessonDTO;
 import ir.maktab.onlinequiz.models.Lesson;
 import ir.maktab.onlinequiz.specification.LessonSpecification;
 import org.springframework.data.domain.Page;
@@ -11,7 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class LessonServiceImpl implements LessonService {
@@ -24,14 +21,14 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public Lesson createLesson(LessonDto lessonDto) {
+    public Lesson createLesson(LessonDTO lessonDto) {
         return lessonDAO.save(
                 new Lesson(null, lessonDto.getLessonName(), lessonDto.getLessonTopic(), null)
         );
     }
 
     @Override
-    public Page<Lesson> lessonSearch(LessonDto lessonDto, Pageable pageable) {
+    public Page<Lesson> lessonSearch(LessonDTO lessonDto, Pageable pageable) {
         lessonSpecification.setLessonDto(lessonDto);
         return lessonDAO.findAll(lessonSpecification, pageable);
     }
@@ -42,7 +39,7 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public Lesson editLesson(LessonDto lessonDto) {
+    public Lesson editLesson(LessonDTO lessonDto) {
         return lessonDAO.save(
                 new Lesson(Long.parseLong(lessonDto.getId()), lessonDto.getLessonName(), lessonDto.getLessonTopic(), null)
         );

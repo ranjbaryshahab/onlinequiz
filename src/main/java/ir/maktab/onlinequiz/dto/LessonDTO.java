@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class LessonDto {
+public class LessonDTO {
     private String id;
     private String lessonName;
     private String lessonTopic;

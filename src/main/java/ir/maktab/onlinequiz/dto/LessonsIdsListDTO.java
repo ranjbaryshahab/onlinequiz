@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @ToString
 @AllArgsConstructor
-public class LessonsIdsListDto {
+public class LessonsIdsListDTO {
     private String secret;
     private List<String> listId;
 }

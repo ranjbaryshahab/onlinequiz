@@ -1,9 +1,7 @@
 package ir.maktab.onlinequiz.specification;
 
-import ir.maktab.onlinequiz.dto.LessonDto;
-import ir.maktab.onlinequiz.models.Account;
+import ir.maktab.onlinequiz.dto.LessonDTO;
 import ir.maktab.onlinequiz.models.Lesson;
-import ir.maktab.onlinequiz.models.Person;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.Specification;
@@ -17,7 +15,7 @@ import java.util.List;
 public class LessonSpecification implements Specification<Lesson> {
     @Getter
     @Setter
-    private LessonDto lessonDto;
+    private LessonDTO lessonDto;
 
     @Override
     public Predicate toPredicate(Root<Lesson> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
