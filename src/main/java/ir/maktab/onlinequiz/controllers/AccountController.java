@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -76,5 +77,10 @@ public class AccountController {
     @PostMapping("/manager/accounts/all/{pageNo}/{pageSize}")
     private Page<Account> getPaginatedAccounts(@PathVariable int pageNo, @PathVariable int pageSize) {
         return accountService.paginatedAccounts(pageNo, pageSize);
+    }
+
+    @PostMapping("/manager/accounts/findAll")
+    private List<Account> accounts() {
+        return accountService.accounts();
     }
 }

@@ -19,7 +19,7 @@ function loadPage(page) {
     }
 
     if (page === 'manager-home') {
-        $('#app-content-load').load('/components/panels/manager/home/manager-home.html');
+        location.reload();
     }
 
     if (page === 'new-users-list') {

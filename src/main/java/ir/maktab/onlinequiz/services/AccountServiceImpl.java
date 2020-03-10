@@ -16,14 +16,12 @@ import ir.maktab.onlinequiz.models.Teacher;
 import ir.maktab.onlinequiz.outcome.LoginToAccountOutcome;
 import ir.maktab.onlinequiz.outcome.RegisterAccountOutcome;
 import ir.maktab.onlinequiz.specification.AccountSpecification;
-import org.hibernate.internal.util.config.ConfigurationHelper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Date;
@@ -190,5 +188,10 @@ public class AccountServiceImpl implements AccountService {
     public Page<Account> paginatedAccounts(int pageNo, int pageSize) {
         Pageable paging = PageRequest.of(pageNo, pageSize);
         return accountDao.findAll(paging);
+    }
+
+    @Override
+    public List<Account> accounts() {
+        return accountDao.findAll();
     }
 }

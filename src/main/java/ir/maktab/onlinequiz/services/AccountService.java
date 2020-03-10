@@ -41,4 +41,7 @@ public interface AccountService {
 
     @Secured("ROLE_MANAGER")
     Page<Account> paginatedAccounts(int pageNo, int pageSize);
+
+    @Secured("ROLE_MANAGER")
+    List<Account> accounts();
 }
