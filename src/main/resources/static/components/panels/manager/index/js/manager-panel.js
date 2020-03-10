@@ -37,6 +37,10 @@ function loadPage(page) {
     if (page === 'teacher-management') {
         $('#app-content-load').load('/components/panels/manager/user-management/teacher-management/teacher-management.html');
     }
+
+    if (page === 'student-management') {
+        $('#app-content-load').load('/components/panels/manager/user-management/student-management/student-management.html');
+    }
 }
 
 function getSecondPart(str) {

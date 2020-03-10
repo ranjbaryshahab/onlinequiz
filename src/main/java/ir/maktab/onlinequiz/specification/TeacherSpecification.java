@@ -1,10 +1,8 @@
 package ir.maktab.onlinequiz.specification;
 
 import ir.maktab.onlinequiz.dto.TeacherDTO;
-import ir.maktab.onlinequiz.models.Account;
-import ir.maktab.onlinequiz.models.Lesson;
-import ir.maktab.onlinequiz.models.Person;
-import ir.maktab.onlinequiz.models.Teacher;
+import ir.maktab.onlinequiz.enums.AccountStatus;
+import ir.maktab.onlinequiz.models.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.Specification;
@@ -32,6 +30,7 @@ public class TeacherSpecification implements Specification<Teacher> {
         setLastName(root, criteriaBuilder, predicates, teacherDTO.getLastName());
         setDegreeOfEducation(root, criteriaBuilder, predicates, teacherDTO.getDegreeOfEducation());
         setTeacherCode(root, criteriaBuilder, predicates, teacherDTO.getTeacherCode());
+        setStatus(root, criteriaBuilder, predicates, teacherDTO.getStatus());
     }
 
     private void setFirstName(Root<Teacher> root, CriteriaBuilder criteriaBuilder, List<Predicate> predicates, String firstName) {
@@ -59,5 +58,11 @@ public class TeacherSpecification implements Specification<Teacher> {
         }
     }
 
+    private void setStatus(Root<Teacher> root, CriteriaBuilder criteriaBuilder, List<Predicate> predicates, String status) {
+        if (status != null && !status.isEmpty()) {
+            Join<Teacher, Account> teacherAccountJoin = root.join("account");
+            predicates.add(criteriaBuilder.equal(root.get("accountStatus"), AccountStatus.valueOf(teacherDTO.getStatus())));
+        }
+    }
 
 }

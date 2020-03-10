@@ -13,7 +13,8 @@ function searchTeacherListFirstTime(pageNo, pageSize) {
         "firstName": $("#teacherFirstNameSearchInput").val(),
         "lastName": $("#teacherLastNameSearchInput").val(),
         "degreeOfEducation": $("#teacherDegreeOfEducationSearchInput").val(),
-        "teacherCode": $("#teacherCodeSearchInput").val()
+        "teacherCode": $("#teacherCodeSearchInput").val(),
+        "status":"ACTIVATE"
     };
 
     jQuery.ajax({
@@ -41,7 +42,8 @@ function searchTeacherListAfterFirstTime(pageNo, pageSize) {
         "firstName": $("#teacherFirstNameSearchInput").val(),
         "lastName": $("#teacherLastNameSearchInput").val(),
         "degreeOfEducation": $("#teacherDegreeOfEducationSearchInput").val(),
-        "teacherCode": $("#teacherCodeSearchInput").val()
+        "teacherCode": $("#teacherCodeSearchInput").val(),
+        "status":"ACTIVATE"
     };
     jQuery.ajax({
         url: "http://localhost:7777/manager/teacher/search/" + pageNo + "/" + pageSize,

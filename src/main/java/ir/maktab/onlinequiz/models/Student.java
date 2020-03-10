@@ -20,6 +20,8 @@ public class Student extends Person {
 
     private String studentCode;
 
+    private Boolean activeCourse;
+
     @ManyToMany
     @JoinTable(
             name = "students_courses",

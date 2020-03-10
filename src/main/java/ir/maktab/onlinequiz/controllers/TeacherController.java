@@ -1,8 +1,7 @@
 package ir.maktab.onlinequiz.controllers;
 
-import ir.maktab.onlinequiz.dto.AccountSearchDTO;
 import ir.maktab.onlinequiz.dto.TeacherDTO;
-import ir.maktab.onlinequiz.models.Account;
+import ir.maktab.onlinequiz.enums.AccountStatus;
 import ir.maktab.onlinequiz.models.Teacher;
 import ir.maktab.onlinequiz.services.TeacherService;
 import org.springframework.data.domain.Page;
@@ -22,7 +21,7 @@ public class TeacherController {
 
     @PostMapping("/manager/teacher/list/{pageNo}/{pageSize}")
     private Page<Teacher> getPaginatedTeachers(@PathVariable int pageNo, @PathVariable int pageSize) {
-        return teacherService.paginatedTeacher(PageRequest.of(pageNo, pageSize));
+        return teacherService.paginatedTeacher(AccountStatus.ACTIVATE, PageRequest.of(pageNo, pageSize));
     }
 
     @PostMapping("/manager/teacher/search/{pageNo}/{pageSize}")
