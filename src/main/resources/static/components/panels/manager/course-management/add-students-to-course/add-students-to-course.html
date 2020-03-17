@@ -1,17 +1,20 @@
-<script src="/components/panels/manager/user-management/teacher-management/js/teacher-management.js" defer></script>
-<script src="/components/panels/manager/user-management/teacher-management/js/teacher-search.js" defer></script>
+<script src="/assets/js/jquery-3.4.1.min.js"></script>
+<script src="/assets/js/popper.min.js"></script>
+<script src="/assets/js/bootstrap.min.js"></script>
+<script src="/components/panels/manager/course-management/add-students-to-course/add-students-to-course.js" defer></script>
+<script src="/components/panels/manager/course-management/add-students-to-course/add-students-to-course-search.js" defer></script>
 <div class="container mb-3">
     <div class="row justify-content-between">
         <div class="col-6">
             <button type="button" class="btn btn-primary mr-3" data-toggle="modal" data-target=".bd-example-modal-xl">
                 جست و جو<i
                     class="fa fa-search"></i></button>
-            <button type="button" class="btn btn-primary mr-3" onclick="loadPage('teacher-management')">نمایش همه
+            <button type="button" class="btn btn-primary mr-3" onclick="loadPage('student-management')">نمایش همه
             </button>
 
         </div>
         <div class="col-4">
-            <select class="custom-select float-left left" id="pageSizeTeacherList">
+            <select class="custom-select float-left left" id="pageSizeStudentList">
                 <option value="">تعداد نمایش در هر صفحه</option>
                 <option value="5">5</option>
                 <option value="10">10</option>
@@ -36,14 +39,14 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="teacherSearchForm">
+                <form id="studentSearchForm">
                     <div class="form-row justify-content-center">
                         <div class="form-group col-2 mt-3">
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fa fa-user"></i></span>
                                 </div>
-                                <input type="text" class="form-control" id="teacherFirstNameSearchInput"
+                                <input type="text" class="form-control" id="studentFirstNameSearchInput"
                                        placeholder="نام">
                             </div>
                         </div>
@@ -53,7 +56,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fa fa-user"></i></span>
                                 </div>
-                                <input type="text" class="form-control" id="teacherLastNameSearchInput"
+                                <input type="text" class="form-control" id="studentLastNameSearchInput"
                                        placeholder="نام خانوادگی">
                             </div>
                         </div>
@@ -63,7 +66,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fa fa-graduation-cap"></i></span>
                                 </div>
-                                <input type="text" class="form-control" id="teacherDegreeOfEducationSearchInput"
+                                <input type="text" class="form-control" id="studentDegreeOfEducationSearchInput"
                                        placeholder="مدرک تحصیلی">
                             </div>
                         </div>
@@ -73,13 +76,13 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fa fa-graduation-cap"></i></span>
                                 </div>
-                                <input type="text" class="form-control" id="teacherCodeSearchInput"
-                                       placeholder="کد استادی">
+                                <input type="text" class="form-control" id="studentCodeSearchInput"
+                                       placeholder="شماره دانشجویی">
                             </div>
                         </div>
 
                         <div class="form-group col-4 mt-3">
-                            <button type="button" class="btn btn-primary" onclick="searchTeacherListFirstTime(0, 10)"
+                            <button type="button" class="btn btn-primary" onclick="searchStudentListFirstTime(0, 10)"
                                     data-dismiss="modal">جست و جو
                             </button>
                         </div>
@@ -89,7 +92,7 @@
         </div>
     </div>
 </div>
-<div id="teachers-list">
+<div id="students-list">
     <div class="table-responsive">
         <table class="table table-striped table-hover">
             <thead>
@@ -99,11 +102,12 @@
                 <th scope="col">نام</th>
                 <th scope="col">نام خانوادگی</th>
                 <th scope="col">مدرک تحصیلی</th>
-                <th scope="col">کد استادی</th>
+                <th scope="col">شماره دانشجویی</th>
+                <th scope="col">دوره ی فعال</th>
                 <th scope="col">جزئیات</th>
             </tr>
             </thead>
-            <tbody id="teachers-list-table-body">
+            <tbody id="students-list-table-body">
 
             </tbody>
         </table>
@@ -111,18 +115,21 @@
 </div>
 
 <nav>
-    <ul class="pagination justify-content-center" id="teachers-list-paging">
+    <ul class="pagination justify-content-center" id="students-list-paging">
 
     </ul>
 </nav>
 
-<div class="modal fade" id="teacherCourseDetailsModal" tabindex="-1" role="dialog"
-     aria-labelledby="teacherCourseDetailsModalLabel"
+<div class="form-inline">
+    <button type="button" class="btn btn-primary my-1" onclick="addStudentsToCourse()">افزودن به دوره</button>
+</div>
+<div class="modal fade" id="studentCourseDetailsModal" tabindex="-1" role="dialog"
+     aria-labelledby="studentCourseDetailsModalLabel"
      aria-hidden="true">
     <div class="modal-dialog  modal-lg" role="document">
         <div class="modal-content bg-light text-dark">
             <div class="modal-header">
-                <h5 class="modal-title" id="teacherCourseDetailsModalLabel">مشاهده دوره ها</h5>
+                <h5 class="modal-title" id="studentCourseDetailsModalLabel">مشاهده دوره ها</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -132,12 +139,12 @@
                     <table class="table table-striped table-hover">
                         <thead>
                         <tr>
-                            <th scope="col">نام دوره</th>
+                            <th scope="col">نام درس</th>
                             <th scope="col">تاریخ شروع دوره</th>
                             <th scope="col">تاریخ پایان دوره</th>
                         </tr>
                         </thead>
-                        <tbody id="courseTeacherDetails">
+                        <tbody id="courseStudentTable">
 
                         </tbody>
                     </table>

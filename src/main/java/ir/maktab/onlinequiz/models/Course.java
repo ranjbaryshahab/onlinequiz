@@ -1,11 +1,11 @@
 package ir.maktab.onlinequiz.models;
 
-import ir.maktab.onlinequiz.enums.CourseStatus;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.Set;
+import java.time.LocalDate;
+import java.util.List;
 
 
 @Getter
@@ -20,23 +20,35 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String courseCode;
+    private String courseName;
 
-    @ManyToOne
-    private Lesson lesson;
+    @ManyToMany
+    @JoinTable(
+            name = "courses_lessons",
+            joinColumns = @JoinColumn(
+                    name = "course_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "lesson_id", referencedColumnName = "id"))
+    private List<Lesson> lessons;
 
+    @JsonIgnoreProperties({"courses"})
+    @ToString.Exclude
     @ManyToOne
     private Teacher teacher;
 
-    @ManyToMany(mappedBy = "courses")
-    private Set<Student> students;
+    @JsonIgnoreProperties({"courses"})
+    @ToString.Exclude
+    @ManyToMany
+    @JoinTable(
+            name = "students_courses",
+            joinColumns = @JoinColumn(
+                    name = "student_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "course_id", referencedColumnName = "id"))
+    private List<Student> students;
 
-    @Temporal(TemporalType.DATE)
-    private Date startCourse;
+    private LocalDate startCourse;
 
-    @Temporal(TemporalType.DATE)
-    private Date endCourse;
+    private LocalDate endCourse;
 
-    @Enumerated(EnumType.STRING)
-    private CourseStatus courseStatus;
 }

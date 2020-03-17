@@ -2,6 +2,7 @@ package ir.maktab.onlinequiz.services;
 
 import ir.maktab.onlinequiz.dao.*;
 import ir.maktab.onlinequiz.dto.AccountSearchDTO;
+import ir.maktab.onlinequiz.dto.AccountStatusDTO;
 import ir.maktab.onlinequiz.dto.LoginAccountDTO;
 import ir.maktab.onlinequiz.dto.RegisterAccountDTO;
 import ir.maktab.onlinequiz.enums.AccountStatus;
@@ -194,4 +195,11 @@ public class AccountServiceImpl implements AccountService {
     public List<Account> accounts() {
         return accountDao.findAll();
     }
+
+    @Override
+    public Page<Account> findByStatusEqualsNot(AccountStatus accountStatus, Pageable pageable) {
+        return accountDao.findAllByAccountStatusNot(accountStatus, pageable);
+    }
+
+
 }

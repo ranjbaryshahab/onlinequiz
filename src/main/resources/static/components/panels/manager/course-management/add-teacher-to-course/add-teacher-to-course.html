@@ -1,5 +1,9 @@
-<script src="/components/panels/manager/user-management/teacher-management/js/teacher-management.js" defer></script>
-<script src="/components/panels/manager/user-management/teacher-management/js/teacher-search.js" defer></script>
+<script src="/assets/js/jquery-3.4.1.min.js"></script>
+<script src="/assets/js/popper.min.js"></script>
+<script src="/assets/js/bootstrap.min.js"></script>
+<script src="/components/panels/manager/course-management/add-teacher-to-course/add-teacher-to-course.js" defer></script>
+<script src="/components/panels/manager/course-management/add-teacher-to-course/add-teacher-to-course-search.js" defer></script>
+
 <div class="container mb-3">
     <div class="row justify-content-between">
         <div class="col-6">
@@ -100,6 +104,7 @@
                 <th scope="col">نام خانوادگی</th>
                 <th scope="col">مدرک تحصیلی</th>
                 <th scope="col">کد استادی</th>
+                <th scope="col">دوره ی فعال</th>
                 <th scope="col">جزئیات</th>
             </tr>
             </thead>
@@ -115,6 +120,10 @@
 
     </ul>
 </nav>
+
+<div class="form-inline">
+    <button type="button" class="btn btn-primary my-1" onclick="addTeacherToCourse()">افزودن به دوره</button>
+</div>
 
 <div class="modal fade" id="teacherCourseDetailsModal" tabindex="-1" role="dialog"
      aria-labelledby="teacherCourseDetailsModalLabel"

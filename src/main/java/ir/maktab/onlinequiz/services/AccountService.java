@@ -1,8 +1,10 @@
 package ir.maktab.onlinequiz.services;
 
 import ir.maktab.onlinequiz.dto.AccountSearchDTO;
+import ir.maktab.onlinequiz.dto.AccountStatusDTO;
 import ir.maktab.onlinequiz.dto.LoginAccountDTO;
 import ir.maktab.onlinequiz.dto.RegisterAccountDTO;
+import ir.maktab.onlinequiz.enums.AccountStatus;
 import ir.maktab.onlinequiz.exceptions.AccountNotFoundException;
 import ir.maktab.onlinequiz.exceptions.UsernameExistInSystemException;
 import ir.maktab.onlinequiz.models.Account;
@@ -44,4 +46,7 @@ public interface AccountService {
 
     @Secured("ROLE_MANAGER")
     List<Account> accounts();
+
+    @Secured("ROLE_MANAGER")
+    Page<Account> findByStatusEqualsNot(AccountStatus accountStatus, Pageable pageable);
 }

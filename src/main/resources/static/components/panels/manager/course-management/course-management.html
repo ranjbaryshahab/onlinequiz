@@ -1,0 +1,409 @@
+<script src="/components/panels/manager/course-management/js/course-management.js"></script>
+<script src="/components/panels/manager/course-management/js/search-course.js"></script>
+<link rel="stylesheet" href="/utils/persianCalender/persianDatepickerDefault.css">
+
+<div class="container mb-3">
+    <div class="row justify-content-between">
+        <div class="col-6">
+            <button type="button" class="btn btn-primary mr-3" data-toggle="modal" data-target=".bd-example-modal-xl">
+                جست و جو<i
+                    class="fa fa-search"></i></button>
+            <button type="button" class="btn btn-primary mr-3" onclick="loadPage('course-management')">نمایش همه</button>
+
+            <button type="button" class="btn btn-primary mr-3" data-toggle="modal" data-target=".create-course">
+                ایجاد دوره<i class="fa fa-plus"></i></button>
+        </div>
+        <div class="col-4">
+            <select class="custom-select float-left left" id="pageSizeCourseList">
+                <option value="">تعداد نمایش در هر صفحه</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="50">75</option>
+                <option value="100">100</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade create-course" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel"
+     aria-hidden="true" id="create-course-modal">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">ایجاد دوره</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="courseCreateForm">
+                    <div class="form-row justify-content-center">
+                        <div class="form-group col-10 mt-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-user"></i></span>
+                                </div>
+                                <input type="text" class="form-control" id="courseNameCreateInput"
+                                       placeholder="نام دوره">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-10 mt-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-calendar-day"></i></span>
+                                </div>
+                                <input type="text" class="form-control usage" id="courseStartCreateInput"
+                                       placeholder="تاریخ شروع دوره"
+                                       aria-describedby="inputGroupPrepend"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-10 mt-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-calendar-day"></i></span>
+                                </div>
+                                <input type="text" class="form-control usage" id="courseEndCreateInput"
+                                       placeholder="تاریخ اتمام دوره"
+                                       aria-describedby="inputGroupPrepend"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group text-center col-6 mt-3">
+                            <button type="button" class="btn btn-primary" onclick="createCourse()">
+                                ثبت و ایجاد دوره
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">جستوجو</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="courseSearchForm">
+                    <div class="form-row justify-content-center">
+                        <div class="form-group col-10 mt-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-user"></i></span>
+                                </div>
+                                <input type="text" class="form-control" id="courseNameSearchInput"
+                                       placeholder="نام دوره">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-10 mt-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-calendar-day"></i></span>
+                                </div>
+                                <input type="text" class="form-control usage" id="courseStartSearchInput"
+                                       placeholder="تاریخ شروع دوره"
+                                       aria-describedby="inputGroupPrepend"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-10 mt-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-calendar-day"></i></span>
+                                </div>
+                                <input type="text" class="form-control usage" id="courseEndSearchInput"
+                                       placeholder="تاریخ اتمام دوره"
+                                       aria-describedby="inputGroupPrepend"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group text-center col-6 mt-3">
+                            <button type="button" class="btn btn-primary" onclick="searchCourseListFirstTime(0, 10)"
+                                    data-dismiss="modal">جست و جو
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form onsubmit="return submitCourseData()">
+    <div id="courses-list">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">انتخاب</th>
+                    <th scope="col">شماره</th>
+                    <th scope="col">نام دوره</th>
+                    <th scope="col">تاریخ شروع دوره</th>
+                    <th scope="col">تاریخ پایان دوره</th>
+                    <th scope="col">جزئیات</th>
+                </tr>
+                </thead>
+                <tbody id="courses-list-table-body">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <nav>
+        <ul class="pagination justify-content-center" id="courses-list-paging">
+
+        </ul>
+    </nav>
+
+    <div class="form-inline">
+
+        <select class="custom-select my-1 mr-sm-2" id="action">
+            <option selected>عملیات</option>
+            <option value="DeleteAllSelectedCourse">حذف انتخاب شده ها</option>
+            <option value="DeleteAllCourse">حذف همه</option>
+        </select>
+
+        <button type="submit" class="btn btn-primary my-1">اعمال</button>
+    </div>
+</form>
+
+<div class="modal fade" id="editCourseModal" tabindex="-1" role="dialog" aria-labelledby="editCourseModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog  modal-lg" role="document">
+        <div class="modal-content bg-light text-dark">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editCourseModalLabel">ویرایش دوره</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="courseEditForm">
+                    <input type="text" id="courseIdEditInput" hidden>
+                    <div class="form-group col-10 mt-3">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-user"></i></span>
+                            </div>
+                            <input type="text" class="form-control" id="courseNameEditInput"
+                                   placeholder="نام دوره">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-10 mt-3">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-calendar-day"></i></span>
+                            </div>
+                            <input type="text" class="form-control usage" id="courseStartEditInput"
+                                   placeholder="تاریخ شروع دوره"
+                                   aria-describedby="inputGroupPrepend">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-10 mt-3">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-calendar-day"></i></span>
+                            </div>
+                            <input type="text" class="form-control usage" id="courseEndEditInput"
+                                   placeholder="تاریخ اتمام دوره"
+                                   aria-describedby="inputGroupPrepend"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-3 mt-3">
+                        <button type="button" class="btn btn-warning" onclick="editCourse()"
+                                data-dismiss="modal">ویرایش
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="studentsCourseManagementModal" tabindex="-1" role="dialog"
+     aria-labelledby="studentsCourseManagementModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog  modal-lg" role="document">
+        <div class="modal-content bg-light text-dark">
+            <div class="modal-header">
+                <h5 class="modal-title" id="studentsCourseManagementModalLabel">دانشجویان</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="container mb-3">
+                    <div class="row justify-content-between">
+                        <div class="col-6">
+                            <button type="button" class="btn btn-primary mr-3" data-dismiss="modal"
+                                    onclick="loadPage('add-students-to-course')">افزودن داشنجو به این دوره
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">انتخاب</th>
+                            <th scope="col">شماره</th>
+                            <th scope="col">نام</th>
+                            <th scope="col">نام خانوادگی</th>
+                            <th scope="col">مدرک تحصیلی</th>
+                            <th scope="col">شماره دانشجویی</th>
+                            <th scope="col"></th>
+                        </tr>
+                        </thead>
+                        <tbody id="courseStudentsList">
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="form-inline">
+                    <form id="deleteStudentsOfCourse">
+                        <select class="custom-select my-1 mr-sm-2" id="studentAction">
+                            <option selected>نوع حذف</option>
+                            <option value="DeleteAllSelectedStudentsOfCourse">حذف انتخاب شده ها</option>
+                            <option value="DeleteAllStudentsOfCourse">حذف همه</option>
+                        </select>
+
+                        <button type="button" class="btn btn-danger my-1" onclick="studentDeleteAction()">حذف</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div class="modal fade" id="teacherCourseManagementModal" tabindex="-1" role="dialog"
+     aria-labelledby="lessonCourseManagementModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog  modal-lg" role="document">
+        <div class="modal-content bg-light text-dark">
+            <div class="modal-header">
+                <h5 class="modal-title" id="teacherCourseManagementModalLabel">استاد</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="container mb-3">
+                    <div class="row justify-content-between">
+                        <div class="col-6">
+                            <button type="button" class="btn btn-primary mr-3" data-dismiss="modal"
+                                    id="addTeacher"
+                                    onclick="loadPage('add-teacher-to-course')">افزودن استاد به این دوره
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">شماره</th>
+                            <th scope="col">نام</th>
+                            <th scope="col">نام خانوادگی</th>
+                            <th scope="col">مدرک تحصیلی</th>
+                            <th scope="col">کد استادی</th>
+                            <th scope="col"></th>
+                        </tr>
+                        </thead>
+                        <tbody id="courseTeacherList">
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="lessonCourseManagementModal" tabindex="-1" role="dialog"
+     aria-labelledby="lessonCourseManagementModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog  modal-lg" role="document">
+        <div class="modal-content bg-light text-dark">
+            <div class="modal-header">
+                <h5 class="modal-title" id="lessonCourseManagementModalLabel">دروس</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="container mb-3">
+                    <div class="row justify-content-between">
+                        <div class="col-6">
+                            <button type="button" class="btn btn-primary mr-3" data-dismiss="modal"
+                                    onclick="loadPage('add-lesson-to-course')">افزودن درس به این دوره
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">انتخاب</th>
+                            <th scope="col">شماره</th>
+                            <th scope="col">نام درس</th>
+                            <th scope="col">سر فصل های درس</th>
+                        </tr>
+                        </thead>
+                        <tbody id="courseLessonsList">
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="form-inline">
+                    <form id="deleteLessonsOfCourse">
+                        <select class="custom-select my-1 mr-sm-2" id="lessonAction">
+                            <option selected>نوع حذف</option>
+                            <option value="DeleteAllSelectedLessonsOfCourse">حذف انتخاب شده ها</option>
+                            <option value="DeleteAllLessonsOfCourse">حذف همه</option>
+                        </select>
+
+                        <button type="button" class="btn btn-danger my-1" onclick="lessonDeleteAction()">حذف</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/utils/persianCalender/persianDatepicker.js"></script>
+<script src="/utils/persianCalender/persianCalendar.js"></script>

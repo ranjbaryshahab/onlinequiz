@@ -21,6 +21,30 @@ var teacherData = {
     }
 };
 
+function addTeacherToCourse() {
+    let teacherToCourse = {
+        "courseId": window.courseIdTeacherModal,
+        "teacherId": $("input[name='teacherRadio']:checked").val()
+    };
+
+    jQuery.ajax({
+        url: "http://localhost:7777/manager/course/add-teacher",
+        type: "POST",
+        data: JSON.stringify(teacherToCourse),
+        contentType: "application/json; charset=utf-8",
+        headers: {
+            "Authorization": "Basic " + btoa(usernameHeader + ":" + passwordHeader)
+        },
+        success: function (data, textStatus, jQxhr) {
+            showAlert('success', 'عملیات با موفقیت انجام شد');
+            loadPage('course-management');
+        },
+        error: function (errorMessage) {
+            //alert(errorMessage)
+        }
+    });
+}
+
 function teacherListFirstTime(pageNo, pageSize) {
     jQuery.ajax({
         url: "http://localhost:7777/manager/teacher/list/" + pageNo + "/" + pageSize,
@@ -77,12 +101,13 @@ function prepareTable(data) {
     let content = '';
     for (let i = 0; i < data.length; i++) {
         content += "<tr>";
-        content += "<td class='text-center'><input class='form-check-input' type='checkbox' value='" + data[i].id + "'></td>";
+        content += "<td class='text-center'><div class='text-left ml-4'><input class='form-check-input' type='radio' name='teacherRadio' value='" + data[i].id + "'></div></td>";
         content += "<td>" + data[i].id + "</td>";
         content += "<td >" + data[i].firstName + "</td>";
         content += "<td >" + data[i].lastName + "</td>";
         content += "<td >" + data[i].degreeOfEducation + "</td>";
         content += "<td >" + data[i].teacherCode + "</td>";
+        content += "<td >" + data[i].activeCourse + "</td>";
         content += "<td >" +
             '<button type="button" class="btn btn-info btn-sm" onclick="showTeacherCourseDetails(' + data[i].id + ')">مشاهده</button></td>';
         content += "</tr>";

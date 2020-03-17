@@ -1,5 +1,6 @@
 package ir.maktab.onlinequiz.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,8 +20,6 @@ public class Teacher extends Person {
     private Long id;
 
     private String teacherCode;
-
-    private Boolean activeCourse;
 
     @OneToMany(mappedBy = "teacher")
     private Set<Course> courses;

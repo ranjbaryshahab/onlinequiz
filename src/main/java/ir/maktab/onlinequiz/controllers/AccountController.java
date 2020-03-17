@@ -1,9 +1,7 @@
 package ir.maktab.onlinequiz.controllers;
 
-import ir.maktab.onlinequiz.dto.AccountSearchDTO;
-import ir.maktab.onlinequiz.dto.LoginAccountDTO;
-import ir.maktab.onlinequiz.dto.NewUsersIdsListDTO;
-import ir.maktab.onlinequiz.dto.RegisterAccountDTO;
+import ir.maktab.onlinequiz.dto.*;
+import ir.maktab.onlinequiz.enums.AccountStatus;
 import ir.maktab.onlinequiz.exceptions.AccountNotFoundException;
 import ir.maktab.onlinequiz.exceptions.UsernameExistInSystemException;
 import ir.maktab.onlinequiz.models.Account;
@@ -83,4 +81,10 @@ public class AccountController {
     private List<Account> accounts() {
         return accountService.accounts();
     }
+
+    @PostMapping("/manager/accounts/all-account-status-not/{pageNo}/{pageSize}")
+    private Page<Account> getAccountsAccountStatusNot(@RequestBody AccountStatusDTO accountStatusDTO, @PathVariable int pageNo, @PathVariable int pageSize) {
+        return accountService.findByStatusEqualsNot(AccountStatus.valueOf(accountStatusDTO.getStatus()), PageRequest.of(pageNo, pageSize));
+    }
+
 }

@@ -11,7 +11,7 @@ function searchUsersListFirstTime(pageNo, pageSize) {
         "email": $("#emailSearchUsersListInput").val(),
         "address": $("#addressSearchUsersListInput").val(),
         "role": $('#roleSearchUsersListInput option:selected').val(),
-        "status": ''
+        "status": 'notEqualDeactivate'
     };
 
     jQuery.ajax({
@@ -23,8 +23,8 @@ function searchUsersListFirstTime(pageNo, pageSize) {
             "Authorization": "Basic " + btoa(usernameHeader + ":" + passwordHeader)
         },
         success: function (data, textStatus, jQxhr) {
-            $("#-users-table-body").empty();
-            $("#-users-list-paging").empty();
+            $("#users-table-body").empty();
+            $("#users-list-paging").empty();
             pagingTableResultSearchUsersList(JSON.parse(data.totalPages));
             prepareTableResultSearchUsersList(data.content);
         },
@@ -47,7 +47,7 @@ function searchUsersListAfterFirstTime(pageNo, pageSize) {
         "email": $("#emailSearchUsersListInput").val(),
         "address": $("#addressSearchUsersListInput").val(),
         "role": $('#roleSearchUsersListInput option:selected').val(),
-        "status": ''
+        "status": 'notEqualDeactivate'
     };
     jQuery.ajax({
         url: "http://localhost:7777/manager/users-list/search/accounts/" + pageNo + "/" + pageSize,

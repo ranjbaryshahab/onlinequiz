@@ -20,6 +20,8 @@ public interface AccountDAO extends PagingAndSortingRepository<Account, Long>, J
 
     List<Account> findAllByAccountStatus(AccountStatus accountStatus);
 
+    Page<Account> findAllByAccountStatusNot(AccountStatus accountStatus, Pageable pageable);
+
     List<Account> findAllByIdIn(List<Long> idList);
 
     List<Account> findAll();

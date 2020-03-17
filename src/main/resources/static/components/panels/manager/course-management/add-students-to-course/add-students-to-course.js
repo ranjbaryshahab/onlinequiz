@@ -83,6 +83,7 @@ function prepareTable(data) {
         content += "<td >" + data[i].lastName + "</td>";
         content += "<td >" + data[i].degreeOfEducation + "</td>";
         content += "<td >" + data[i].studentCode + "</td>";
+        content += "<td >" + data[i].activeCourse + "</td>";
         content += "<td >" +
             '<button type="button" class="btn btn-info btn-sm" onclick="showStudentDetails(' + data[i].id + ')">مشاهده</button></td>';
         content += "</tr>";
@@ -106,4 +107,32 @@ function showStudentDetails(id) {
         $('#courseStudentTable').html(content);
     }
     $("#studentCourseDetailsModal").modal('show');
+}
+
+function addStudentsToCourse() {
+    let checks = [];
+    $('input[type="checkbox"]:checked').each(function (i) {
+        checks[i] = $(this).val();
+    });
+    let lessonToCourse = {
+        "secret": window.courseIdStudentModal,
+        "listId": checks
+    };
+
+    jQuery.ajax({
+        url: "http://localhost:7777/manager/course/add-students",
+        type: "POST",
+        data: JSON.stringify(lessonToCourse),
+        contentType: "application/json; charset=utf-8",
+        headers: {
+            "Authorization": "Basic " + btoa(usernameHeader + ":" + passwordHeader)
+        },
+        success: function (data, textStatus, jQxhr) {
+            showAlert('success', 'عملیات با موفقیت انجام شد');
+            loadPage('course-management');
+        },
+        error: function (errorMessage) {
+            //alert(errorMessage)
+        }
+    });
 }

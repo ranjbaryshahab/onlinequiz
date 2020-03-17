@@ -20,14 +20,6 @@ public class Student extends Person {
 
     private String studentCode;
 
-    private Boolean activeCourse;
-
-    @ManyToMany
-    @JoinTable(
-            name = "students_courses",
-            joinColumns = @JoinColumn(
-                    name = "student_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(
-                    name = "course_id", referencedColumnName = "id"))
+    @ManyToMany(mappedBy = "students")
     private Set<Course> courses;
 }

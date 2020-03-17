@@ -12,10 +12,15 @@ $('#pageSizeUsersList').change(function () {
 });
 
 function usersListFirstTime(pageNo, pageSize) {
+    const accountStatusDTO = {
+        "field": 'status',
+        "status": 'DEACTIVATE'
+    };
     jQuery.ajax({
-        url: "http://localhost:7777/manager/accounts/all/" + pageNo + "/" + pageSize,
+        url: "http://localhost:7777/manager/accounts/all-account-status-not/" + pageNo + "/" + pageSize,
         type: "POST",
         contentType: "application/json; charset=utf-8",
+        data: JSON.stringify(accountStatusDTO),
         headers: {
             "Authorization": "Basic " + btoa(usernameHeader + ":" + passwordHeader)
         },
@@ -30,10 +35,15 @@ function usersListFirstTime(pageNo, pageSize) {
 }
 
 function usersListAfterFirstTime(pageNo, pageSize) {
+    const accountStatusDTO = {
+        "field": 'status',
+        "status": 'DEACTIVATE'
+    };
     jQuery.ajax({
-        url: "http://localhost:7777/manager/accounts/all/" + pageNo + "/" + pageSize,
+        url: "http://localhost:7777/manager/accounts/all-account-status-not/" + pageNo + "/" + pageSize,
         type: "POST",
         contentType: "application/json; charset=utf-8",
+        data: JSON.stringify(accountStatusDTO),
         headers: {
             "Authorization": "Basic " + btoa(usernameHeader + ":" + passwordHeader)
         },
@@ -80,7 +90,7 @@ function prepareTable(data) {
             if (data[i].roles[j].roleType === "ROLE_TEACHER")
                 role = 'استاد';
         }
-        let createAccountDate = new Date(data[i].createAccountDate) ;
+        let createAccountDate = new Date(data[i].createAccountDate);
         let email = data[i].person.communication.email;
         let phoneNumber = data[i].person.communication.phoneNumber;
         let cellPhoneNumber = data[i].person.communication.cellPhoneNumber;

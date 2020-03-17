@@ -10,11 +10,6 @@
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="/assets/image/bg.css">
     <link rel="stylesheet" href="/components/panels/manager/index/css/manager-panel.css">
-
-    <script src="/assets/js/jquery-3.4.1.min.js"></script>
-    <script src="/assets/js/alert.js"></script>
-    <script src="/environments/prod.environment.js"></script>
-
 </head>
 <body>
 
@@ -31,8 +26,8 @@
                 <li class="menu-li list-group-item list-group-item-action bg-light"
                     onclick="loadPage('new-users-list')"><i class="fa fa-user-check"></i> مشاهده و تایید اعضای جدید
                 </li>
-                <li class="menu-li list-group-item list-group-item-action bg-light" onclick="loadPage('users-list')"><i
-                        class="fa fa-users"></i> مشاهده همه اعضا
+                <li class="menu-li list-group-item list-group-item-action bg-light" onclick="loadPage('users-list')">
+                    <i class="fa fa-users"></i> مشاهده همه اعضا
                 </li>
 
                 <li class="menu-li list-group-item list-group-item-action bg-light" onclick="loadPage('teacher-management')"><i
@@ -44,6 +39,10 @@
             </ul>
             <a href="#" class="list-group-item list-group-item-action bg-light"
                onclick="loadPage('lessons-list')"><i class="fa fa-book"></i> مدیریت درس ها</a>
+
+            <a href="#" class="list-group-item list-group-item-action bg-light"
+               onclick="loadPage('course-management')"><i class="fa fa-book"></i> مدیریت دوره ها</a>
+
             <a href="#" class="list-group-item list-group-item-action bg-light"><i class="fa fa-sign-out"></i> خروج</a>
         </div>
     </div>
@@ -67,16 +66,14 @@
 
 </div>
 
-
-<script src="/components/panels/manager/index/js/manager-panel.js"></script>
+<script src="/assets/js/jquery-3.4.1.min.js"></script>
 <script src="/assets/js/popper.min.js"></script>
 <script src="/assets/js/bootstrap.min.js"></script>
+<script src="/assets/js/alert.js"></script>
+<script src="/environments/prod.environment.js"></script>
+<script src="/components/panels/manager/index/js/manager-panel.js"></script>
 <script defer src="https://use.fontawesome.com/releases/v5.12.1/js/all.js"></script>
 <script defer src="https://use.fontawesome.com/releases/v5.12.1/js/v4-shims.js"></script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript" src="/components/panels/manager/home/js/manager-home.js"></script>
-<script src="/components/panels/manager/user-management/new-users-list/js/search-new-users-list.js"></script>
-<script src="/components/panels/manager/user-management/users-list/js/search-users-list.js"></script>
-
 </body>
 </html>

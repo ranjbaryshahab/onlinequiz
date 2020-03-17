@@ -41,6 +41,22 @@ function loadPage(page) {
     if (page === 'student-management') {
         $('#app-content-load').load('/components/panels/manager/user-management/student-management/student-management.html');
     }
+
+    if (page === 'course-management') {
+        $('#app-content-load').load('/components/panels/manager/course-management/course-management.html');
+    }
+
+    if (page === 'add-lesson-to-course') {
+        $('#app-content-load').load('/components/panels/manager/course-management/add-lesson-to-course/add-lesson-to-course.html');
+    }
+
+    if(page==='add-teacher-to-course'){
+        $('#app-content-load').load('/components/panels/manager/course-management/add-teacher-to-course/add-teacher-to-course.html');
+    }
+
+    if(page==='add-students-to-course'){
+        $('#app-content-load').load('/components/panels/manager/course-management/add-students-to-course/add-students-to-course.html');
+    }
 }
 
 function getSecondPart(str) {

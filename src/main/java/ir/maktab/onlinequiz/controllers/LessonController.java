@@ -35,8 +35,8 @@ public class LessonController {
     }
 
     @PostMapping("/manager/lesson/delete-all-selected")
-    private void deleteAllSelected(@RequestBody LessonsIdsListDTO lessonsIdsListDto) {
-        lessonService.deleteAllSelected(lessonsIdsListDto.getListId()
+    private void deleteAllSelected(@RequestBody IdsListDTO idsListDto) {
+        lessonService.deleteAllSelected(idsListDto.getListId()
                 .stream()
                 .map(Long::parseLong)
                 .collect(Collectors.toList()));

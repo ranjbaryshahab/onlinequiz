@@ -1,5 +1,6 @@
 package ir.maktab.onlinequiz.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,6 +22,8 @@ public class Lesson {
 
     private String topic;
 
-    @OneToMany(mappedBy = "lesson")
+    @JsonIgnore
+    @ToString.Exclude
+    @ManyToMany(mappedBy = "lessons")
     private Set<Course> courses;
 }
