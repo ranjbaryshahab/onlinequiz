@@ -2,6 +2,7 @@ package ir.maktab.onlinequiz.services;
 
 import ir.maktab.onlinequiz.dto.AddTeacherToCourseDTO;
 import ir.maktab.onlinequiz.dto.CourseDTO;
+import ir.maktab.onlinequiz.dto.CreateExamDTO;
 import ir.maktab.onlinequiz.dto.IdsListDTO;
 import ir.maktab.onlinequiz.models.Course;
 import ir.maktab.onlinequiz.outcome.CourseDrawOutcome;
@@ -56,4 +57,16 @@ public interface CourseService {
 
     @Secured("ROLE_MANAGER")
     void deleteAllStudentsOfCourse(IdsListDTO idsListDTO);
+
+    @Secured("ROLE_TEACHER")
+    Page<Course> findAllByTeacher_Account_Username(String username, Pageable pageable);
+
+    @Secured("ROLE_TEACHER")
+    Course addExamToCourse(CreateExamDTO createExamDTO);
+
+    @Secured("ROLE_TEACHER")
+    void deleteAllSelectedExamsOfCourse(IdsListDTO idsListDTO);
+
+    @Secured("ROLE_TEACHER")
+    void deleteAllExamsOfCourse(IdsListDTO idsListDTO);
 }

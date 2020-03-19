@@ -51,4 +51,8 @@ public class Course {
 
     private LocalDate endCourse;
 
+    @JsonIgnoreProperties({"course"})
+    @ToString.Exclude
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Exam> exams;
 }

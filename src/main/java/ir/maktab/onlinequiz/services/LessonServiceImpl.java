@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class LessonServiceImpl implements LessonService {
@@ -23,7 +24,7 @@ public class LessonServiceImpl implements LessonService {
     @Override
     public Lesson createLesson(LessonDTO lessonDto) {
         return lessonDAO.save(
-                new Lesson(null, lessonDto.getLessonName(), lessonDto.getLessonTopic(), null)
+                new Lesson(null, lessonDto.getLessonName(), lessonDto.getLessonTopic(), null, null)
         );
     }
 
@@ -40,9 +41,17 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     public Lesson editLesson(LessonDTO lessonDto) {
-        return lessonDAO.save(
-                new Lesson(Long.parseLong(lessonDto.getId()), lessonDto.getLessonName(), lessonDto.getLessonTopic(), null)
-        );
+        Optional<Lesson> optionalLesson = lessonDAO.findById(Long.parseLong(lessonDto.getId()));
+        if (optionalLesson.isPresent()) {
+            Lesson lesson = optionalLesson.get();
+            return lessonDAO.save(new Lesson(
+                    lesson.getId(),
+                    lessonDto.getLessonName(),
+                    lessonDto.getLessonTopic(),
+                    null,
+                    lesson.getQuestionsBank()));
+        }
+        return null;
     }
 
 

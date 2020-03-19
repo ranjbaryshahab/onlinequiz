@@ -51,11 +51,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/components/login/js/login.js",
                         "/components/register/**",
                         "/login",
-                        "/register"
+                        "/user/register"
                 ).permitAll()
                 .antMatchers(HttpMethod.GET).permitAll()
-                .antMatchers(HttpMethod.POST).permitAll()
                 .antMatchers("/manager/**").hasRole("MANAGER")
+                .antMatchers("/teacher/**").hasRole("TEACHER")
+                .antMatchers("/student/**").hasRole("STUDENT")
                 .antMatchers("/guest/**").hasRole("GUEST")
                 .anyRequest().authenticated()
                 .and()

@@ -1,16 +1,11 @@
 package ir.maktab.onlinequiz.services;
 
-import ir.maktab.onlinequiz.dao.CourseDAO;
-import ir.maktab.onlinequiz.dao.LessonDAO;
-import ir.maktab.onlinequiz.dao.StudentDAO;
-import ir.maktab.onlinequiz.dao.TeacherDAO;
+import ir.maktab.onlinequiz.dao.*;
 import ir.maktab.onlinequiz.dto.AddTeacherToCourseDTO;
 import ir.maktab.onlinequiz.dto.CourseDTO;
+import ir.maktab.onlinequiz.dto.CreateExamDTO;
 import ir.maktab.onlinequiz.dto.IdsListDTO;
-import ir.maktab.onlinequiz.models.Course;
-import ir.maktab.onlinequiz.models.Lesson;
-import ir.maktab.onlinequiz.models.Student;
-import ir.maktab.onlinequiz.models.Teacher;
+import ir.maktab.onlinequiz.models.*;
 import ir.maktab.onlinequiz.outcome.CourseDrawOutcome;
 import ir.maktab.onlinequiz.specification.CourseSpecification;
 import ir.maktab.onlinequiz.validations.StartAndEndDateCourseValidate;
@@ -55,7 +50,8 @@ public class CourseServiceImpl implements CourseService {
                     null,
                     null,
                     startDate,
-                    endDate
+                    endDate,
+                    null
             ));
         return null;
     }
@@ -107,16 +103,22 @@ public class CourseServiceImpl implements CourseService {
         LocalDate startDate = LocalDate.parse(courseDTO.getCourseStartDate());
         LocalDate endDate = LocalDate.parse(courseDTO.getCourseEndDate());
 
-        if (StartAndEndDateCourseValidate.validate(startDate, endDate))
-            return courseDAO.save(new Course(
-                    Long.parseLong(courseDTO.getCourseId()),
-                    courseDTO.getCourseName(),
-                    null,
-                    null,
-                    null,
-                    startDate,
-                    endDate
-            ));
+        if (StartAndEndDateCourseValidate.validate(startDate, endDate)) {
+            Optional<Course> courseOptional = courseDAO.findById(Long.parseLong(courseDTO.getCourseId()));
+            if (courseOptional.isPresent()) {
+                Course course = courseOptional.get();
+                return courseDAO.save(new Course(
+                        course.getId(),
+                        courseDTO.getCourseName(),
+                        course.getLessons(),
+                        course.getTeacher(),
+                        course.getStudents(),
+                        startDate,
+                        endDate,
+                        course.getExams()
+                ));
+            }
+        }
         return null;
     }
 
@@ -236,6 +238,73 @@ public class CourseServiceImpl implements CourseService {
             Course course = courseDAO.findById(Long.parseLong(idsListDTO.getSecret())).get();
             if (course.getStudents() != null && !course.getStudents().isEmpty()) {
                 course.getStudents().removeAll(course.getStudents());
+            }
+            courseDAO.save(course);
+        }
+    }
+
+    @Override
+    public Page<Course> findAllByTeacher_Account_Username(String username, Pageable pageable) {
+        return courseDAO.findAllByTeacher_Account_Username(username, pageable);
+    }
+
+    @Override
+    public Course addExamToCourse(CreateExamDTO createExamDTO) {
+        Optional<Course> courseOptional = courseDAO.findById(Long.parseLong(createExamDTO.getCourseId()));
+        if (courseOptional.isPresent()) {
+            Course course = courseOptional.get();
+            Exam exam = new Exam(
+                    null,
+                    createExamDTO.getTitle(),
+                    createExamDTO.getDescription(),
+                    createExamDTO.getTime(),
+                    course
+            );
+            List<Exam> exams = new ArrayList<>();
+            exams.add(exam);
+            if (course.getExams() == null) {
+                course.setExams(exams);
+            } else {
+                course.getExams().add(exam);
+            }
+            return courseDAO.save(new Course(
+                    course.getId(),
+                    course.getCourseName(),
+                    course.getLessons(),
+                    course.getTeacher(),
+                    course.getStudents(),
+                    course.getStartCourse(),
+                    course.getEndCourse(),
+                    course.getExams()
+            ));
+        }
+        return null;
+    }
+
+    @Override
+    public void deleteAllSelectedExamsOfCourse(IdsListDTO idsListDTO) {
+        Optional<Course> courseOptional = courseDAO.findById(Long.parseLong(idsListDTO.getSecret()));
+        if (courseOptional.isPresent()) {
+            Course course = courseOptional.get();
+            if (course.getExams() != null && !course.getExams().isEmpty()) {
+                List<Long> ids = idsListDTO.getListId()
+                        .stream()
+                        .map(Long::parseLong)
+                        .collect(Collectors.toList());
+
+                course.getExams().removeIf(exam -> ids.contains(exam.getId()));
+            }
+            courseDAO.save(course);
+        }
+    }
+
+    @Override
+    public void deleteAllExamsOfCourse(IdsListDTO idsListDTO) {
+        Optional<Course> courseOptional = courseDAO.findById(Long.parseLong(idsListDTO.getSecret()));
+        if (courseOptional.isPresent()) {
+            Course course = courseOptional.get();
+            if (course.getExams() != null && !course.getExams().isEmpty()) {
+                course.getExams().removeAll(course.getExams());
             }
             courseDAO.save(course);
         }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -26,4 +27,7 @@ public class Lesson {
     @ToString.Exclude
     @ManyToMany(mappedBy = "lessons")
     private Set<Course> courses;
+
+    @ManyToMany(mappedBy = "lessons")
+    private Set<Question> questionsBank = new HashSet<>();
 }

@@ -48,13 +48,13 @@ function loginToAccount() {
             } else {
                 for (let i = 0; i < data.roles.length; i++) {
                     if (data.roles[i].roleType === "ROLE_STUDENT") {
-                        location.replace("https://www.student.com")
+                        location.replace("/components/panels/student/index/student-panel.html?" + btoa( username + ":" + password));
                     }
                     if (data.roles[i].roleType === "ROLE_TEACHER") {
-                        location.replace("https://www.teacher.com")
+                        location.replace("/components/panels/teacher/index/teacher-panel.html?" + btoa( username + ":" + password));
                     }
                     if (data.roles[i].roleType === "ROLE_MANAGER") {
-                        location.replace("/components/panels/manager/index/manager-panel.html?" + btoa( username + ":" + password))
+                        location.replace("/components/panels/manager/index/manager-panel.html?" + btoa( username + ":" + password));
                     }
                 }
             }

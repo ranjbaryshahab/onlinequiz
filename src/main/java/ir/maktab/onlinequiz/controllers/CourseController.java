@@ -1,10 +1,9 @@
 package ir.maktab.onlinequiz.controllers;
 
-import ir.maktab.onlinequiz.dto.AccountSearchDTO;
 import ir.maktab.onlinequiz.dto.AddTeacherToCourseDTO;
 import ir.maktab.onlinequiz.dto.CourseDTO;
+import ir.maktab.onlinequiz.dto.CreateExamDTO;
 import ir.maktab.onlinequiz.dto.IdsListDTO;
-import ir.maktab.onlinequiz.models.Account;
 import ir.maktab.onlinequiz.models.Course;
 import ir.maktab.onlinequiz.outcome.CourseDrawOutcome;
 import ir.maktab.onlinequiz.services.CourseService;
@@ -14,8 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
-import java.util.List;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -113,5 +110,25 @@ public class CourseController {
     @PostMapping("/manager/course/search/{pageNo}/{pageSize}")
     private Page<Course> search(@RequestBody CourseDTO courseDTO, @PathVariable int pageNo, @PathVariable int pageSize) {
         return courseService.courseSearch(courseDTO, PageRequest.of(pageNo, pageSize));
+    }
+
+    @PostMapping("/teacher/teacher-course/{username}/{pageNo}/{pageSize}")
+    private Page<Course> teacherCourse(@PathVariable String username, @PathVariable int pageNo, @PathVariable int pageSize) {
+        return courseService.findAllByTeacher_Account_Username(username, PageRequest.of(pageNo, pageSize));
+    }
+
+    @PostMapping("/teacher/teacher-course/add-exam-to-course")
+    private Course addExamToCourse(@RequestBody CreateExamDTO createExamDTO) {
+        return courseService.addExamToCourse(createExamDTO);
+    }
+
+    @PostMapping("/teacher/teacher-course/exams/delete-all-selected")
+    private void deleteAllSelectedExamsOfCourse(@RequestBody IdsListDTO idsListDTO) {
+        courseService.deleteAllSelectedExamsOfCourse(idsListDTO);
+    }
+
+    @PostMapping("/teacher/teacher-course/exams/delete-all")
+    private void deleteAllExamsOfCourse(@RequestBody IdsListDTO idsListDTO) {
+        courseService.deleteAllExamsOfCourse(idsListDTO);
     }
 }

@@ -12,4 +12,6 @@ public interface CourseDAO extends PagingAndSortingRepository<Course, Long>, Jpa
     Page<Course> findAll(Pageable pageable);
 
     List<Course> findAll();
+
+    Page<Course> findAllByTeacher_Account_Username(String username, Pageable pageable);
 }

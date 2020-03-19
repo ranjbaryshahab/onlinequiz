@@ -10,10 +10,7 @@ import ir.maktab.onlinequiz.enums.RoleTypes;
 import ir.maktab.onlinequiz.exceptions.AccountNotFoundException;
 import ir.maktab.onlinequiz.exceptions.UsernameExistInSystemException;
 import ir.maktab.onlinequiz.mappers.RoleMapper;
-import ir.maktab.onlinequiz.models.Account;
-import ir.maktab.onlinequiz.models.Person;
-import ir.maktab.onlinequiz.models.Student;
-import ir.maktab.onlinequiz.models.Teacher;
+import ir.maktab.onlinequiz.models.*;
 import ir.maktab.onlinequiz.outcome.LoginToAccountOutcome;
 import ir.maktab.onlinequiz.outcome.RegisterAccountOutcome;
 import ir.maktab.onlinequiz.specification.AccountSpecification;
@@ -25,10 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -107,17 +101,22 @@ public class AccountServiceImpl implements AccountService {
     public void acceptAllSelected(List<Long> idList) {
         accountDao.findAllByIdIn(idList)
                 .stream()
-                .map(account -> new Account(
-                        account.getId(),
-                        account.getUsername(),
-                        account.getPassword(),
-                        AccountStatus.ACTIVATE,
-                        account.getCreateAccountDate(),
-                        account.getLastLoginDate(),
-                        account.getPerson(),
-                        account.isActive(),
-                        account.getRoles()
-                ))
+                .map(account ->
+                        {
+                            account.getRoles().removeIf(role -> role.getRoleType().equals(RoleTypes.ROLE_GUEST));
+                            return new Account(
+                                    account.getId(),
+                                    account.getUsername(),
+                                    account.getPassword(),
+                                    AccountStatus.ACTIVATE,
+                                    account.getCreateAccountDate(),
+                                    account.getLastLoginDate(),
+                                    account.getPerson(),
+                                    account.isActive(),
+                                    account.getRoles()
+                            );
+                        }
+                )
                 .collect(Collectors.toList())
                 .forEach(accountDao::save);
     }
@@ -145,17 +144,21 @@ public class AccountServiceImpl implements AccountService {
     public void acceptAll() {
         accountDao.findAllByAccountStatus(AccountStatus.AWAITING_APPROVAL)
                 .stream()
-                .map(account -> new Account(
-                        account.getId(),
-                        account.getUsername(),
-                        account.getPassword(),
-                        AccountStatus.ACTIVATE,
-                        account.getCreateAccountDate(),
-                        account.getLastLoginDate(),
-                        account.getPerson(),
-                        account.isActive(),
-                        account.getRoles()
-                ))
+                .map(account -> {
+                            account.getRoles().removeIf(role -> role.getRoleType().equals(RoleTypes.ROLE_GUEST));
+                            return new Account(
+                                    account.getId(),
+                                    account.getUsername(),
+                                    account.getPassword(),
+                                    AccountStatus.ACTIVATE,
+                                    account.getCreateAccountDate(),
+                                    account.getLastLoginDate(),
+                                    account.getPerson(),
+                                    account.isActive(),
+                                    account.getRoles()
+                            );
+                        }
+                )
                 .collect(Collectors.toList())
                 .forEach(accountDao::save);
     }

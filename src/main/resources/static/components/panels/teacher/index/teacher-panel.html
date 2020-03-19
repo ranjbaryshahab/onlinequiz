@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>Teacher Panel</title>
+    <link rel="stylesheet" href="/assets/fonts/font.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/v4-shims.css">
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/image/bg.css">
+    <link rel="stylesheet" href="/components/panels/teacher/index/css/teacher-panel.css">
+
+</head>
+<body>
+
+<div class="d-flex" id="wrapper">
+
+    <div class="bg-light border-right" id="sidebar-wrapper">
+        <div class="sidebar-heading"><h3 class="text-center">آزمون آنلاین</h3></div>
+        <div class="list-group list-group-flush">
+            <a href="#" class="list-group-item list-group-item-action bg-light"
+               onclick="loadPage('teacher-home')"><i class="fa fa-home"></i> خانه</a>
+
+            <a href="#" class="list-group-item list-group-item-action bg-light"
+               onclick="loadPage('teacher-courses')"><i class="fa fa-book"></i> دوره های من </a>
+
+            <a href="#" class="list-group-item list-group-item-action bg-light"><i class="fa fa-sign-out"></i> خروج</a>
+        </div>
+    </div>
+
+    <div id="page-content-wrapper">
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+
+            <button class="btn btn-primary" id="menu-toggle" style="margin-left: 20px"><span><i
+                    class="fa fa-align-justify"></i></span></button>
+
+        </nav>
+
+
+        <div class="app-content p-3">
+            <div id="response"></div>
+            <div class="app-content-load" id="app-content-load">
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="/assets/js/jquery-3.4.1.min.js"></script>
+<script src="/assets/js/popper.min.js"></script>
+<script src="/assets/js/bootstrap.min.js"></script>
+<script src="/assets/js/alert.js"></script>
+<script src="/environments/prod.environment.js"></script>
+<script src="/components/panels/teacher/index/js/teacher-panel.js"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.12.1/js/all.js"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.12.1/js/v4-shims.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+</body>
+</html>
