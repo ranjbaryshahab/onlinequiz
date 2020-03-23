@@ -1,12 +1,9 @@
 package ir.maktab.onlinequiz.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -15,17 +12,19 @@ import java.util.Set;
 @ToString
 
 @Entity
-public class Lesson {
+public class Score {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private Float point;
 
-    private String topic;
+    @ManyToOne
+    @JoinColumn(name = "questionId")
+    private Question question;
 
-    @JsonIgnore
-    @ToString.Exclude
-    @ManyToMany(mappedBy = "lessons")
-    private Set<Course> courses;
+    @ManyToOne
+    @JsonIgnoreProperties({"questions","exam","course"})
+    @JoinColumn(name = "exam_id")
+    private Exam exam;
 }

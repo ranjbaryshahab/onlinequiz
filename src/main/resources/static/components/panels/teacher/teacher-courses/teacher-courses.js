@@ -157,13 +157,7 @@ function showExamCourseManagementModal(id) {
                 content += "<td >" + exam[j].title + "</td>";
                 content += "<td >" + exam[j].time + "</td>";
                 content += "<td >" + exam[j].description + "</td>";
-                content += "<td >" +
-                    "<select class='custom-select' id='questionTypeSelect' onchange='questionTypeSelect(" + exam[j].id + ")'>" +
-                    "  <option selected value='text'>افزودن سوال</option>" +
-                    "  <option value='newQuestion'>سوال جدید</option>" +
-                    "  <option value='myQuestionsBank'>افزودن از بانک سوالات شخصی</option>" +
-                    "  <option value='lessonQuestionsBank'>افزودن از بانک سوالات درس</option>" +
-                    "</select></td>";
+                content += '<td><button type="button" class="btn btn-primary btn-sm mr-2" onclick="questionManagement(\'' + exam[j].id + '\')">سوالات</button>' + '</td>';
                 content += "</tr>";
             }
         }
@@ -263,29 +257,7 @@ function deleteAllExamsOfCourse() {
     })
 }
 
-function questionTypeSelect(examId) {
-    window.examId = examId;
-    var selectBox = document.getElementById("questionTypeSelect");
-    var selectedValue = selectBox.options[selectBox.selectedIndex].value;
-    if (selectedValue === 'newQuestion') {
-        $('#addNewQuestionModal').modal('show');
-    }
+function questionManagement(id) {
+    window.questionListExamId = id;
+    loadPage('question-management');
 }
-
-function questionTypeCreateChange(){
-    var selectBox = document.getElementById("questionTypeCreateSelect");
-    var selectedValue = selectBox.options[selectBox.selectedIndex].value;
-    if(selectedValue === 'multipleChoice'){
-        $('#multipleChoiceQuestionContent').html(`
-            
-        `)
-    }else if(selectedValue==='descriptive'){
-        $('#multipleChoiceQuestionContent').empty();
-
-    }
-}
-
-function createNewQuestion() {
-
-}
-

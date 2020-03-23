@@ -24,7 +24,7 @@ public class LessonServiceImpl implements LessonService {
     @Override
     public Lesson createLesson(LessonDTO lessonDto) {
         return lessonDAO.save(
-                new Lesson(null, lessonDto.getLessonName(), lessonDto.getLessonTopic(), null, null)
+                new Lesson(null, lessonDto.getLessonName(), lessonDto.getLessonTopic(), null)
         );
     }
 
@@ -48,8 +48,7 @@ public class LessonServiceImpl implements LessonService {
                     lesson.getId(),
                     lessonDto.getLessonName(),
                     lessonDto.getLessonTopic(),
-                    null,
-                    lesson.getQuestionsBank()));
+                    null));
         }
         return null;
     }

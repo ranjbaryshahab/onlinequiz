@@ -1,0 +1,274 @@
+<script src="/assets/js/jquery-3.4.1.min.js"></script>
+<script src="/assets/js/popper.min.js"></script>
+<script src="/assets/js/bootstrap.min.js"></script>
+<script src="/components/panels/teacher/teacher-courses/question-management/question-management.js" defer></script>
+<script src="/components/panels/teacher/teacher-courses/question-management/question-management-search.js"
+        defer></script>
+<script src="/components/panels/teacher/teacher-courses/question-management/editQuestion.js"
+        defer></script>
+
+<div class="container mb-3">
+    <div class="row justify-content-between">
+        <div class="col-8">
+            <button type="button" class="btn btn-primary mr-1" data-toggle="modal" data-target=".bd-example-modal-xl">
+                جست و جو<i
+                    class="fa fa-search"></i></button>
+            <button type="button" class="btn btn-primary mr-1" onclick="loadPage('question-management')">نمایش همه
+            </button>
+            <select class='custom-select col-4' id='questionTypeSelect'
+                    onchange='questionTypeSelect()'>
+                <option selected value='text'>افزودن سوال</option>
+                <option value='newQuestion'>سوال جدید</option>
+                <option value='myQuestionsBank'>افزودن از بانک سوالات</option>
+            </select>
+        </div>
+
+        <div class="col-4">
+            <select class="custom-select float-left left" id="pageSizeQuestionList">
+                <option value="">تعداد نمایش در هر صفحه</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="50">75</option>
+                <option value="100">100</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<div id="question-list">
+    <div class="col-2 mb-4 mt-4">
+        <select class="custom-select" id="questionTypeListSelect" onchange="questionTypeListChange()">
+            <option value="descriptive">تشریحی</option>
+            <option value="multiple-choice">چند گزینه ای</option>
+        </select>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th scope="col">انتخاب</th>
+                <th scope="col">شماره</th>
+                <th scope="col">عنوان</th>
+                <th scope="col">متن</th>
+                <th scope="col">پاسخ</th>
+                <th scope="col">نمره</th>
+                <th scope="col" id="optionsQuestion"></th>
+            </tr>
+            </thead>
+            <tbody id="questionsList">
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<nav>
+    <ul class="pagination justify-content-center" id="questions-list-paging">
+
+    </ul>
+</nav>
+
+<div class="form-inline">
+
+    <select class="custom-select my-1 mr-sm-2" id="questionAction">
+        <option selected>عملیات</option>
+        <option value="DeleteAllSelectedQuestions">حذف انتخاب شده ها</option>
+        <option value="DeleteAllQuestions">حذف همه</option>
+    </select>
+
+    <button type="button" class="btn btn-danger my-1" onclick="questionDeleteAction()">حذف</button>
+</div>
+
+<div class="modal fade" id="choicesQuestionModal" tabindex="-1" role="dialog"
+     aria-labelledby="choicesQuestionModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog  modal-lg" role="document">
+        <div class="modal-content bg-light text-dark">
+            <div class="modal-header">
+                <h5 class="modal-title" id="choicesQuestionModalLabel">گزینه ها</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">شماره</th>
+                            <th scope="col">گزینه</th>
+                        </tr>
+                        </thead>
+                        <tbody id="choicesQuestionList">
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">بستن</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel"
+     aria-hidden="true" id="addNewQuestionModal">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">ایجاد سوال</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="questionCreateForm">
+                    <div class="form-row justify-content-center">
+                        <div class="form-group col-8 mt-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-user"></i></span>
+                                </div>
+                                <input type="text" class="form-control" id="titleQuestionCreateInput"
+                                       placeholder="عنوان">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-8 mt-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-map-marker-alt"></i></span>
+                                </div>
+                                <textarea class="form-control" id="textQuestionCreateInput"
+                                          placeholder="متن"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-8 mt-3">
+                            <select class="custom-select" id="questionTypeCreateSelect"
+                                    onchange="questionTypeCreateChange()">
+                                <option selected>نوع سوال</option>
+                                <option value="descriptive">تشریحی</option>
+                                <option value="multipleChoice">چند گزینه ای</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-8 mt-3" id="multipleChoiceQuestionContent">
+
+                        </div>
+
+                        <div class="form-group col-8 mt-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-map-marker-alt"></i></span>
+                                </div>
+                                <textarea class="form-control" id="answerQuestionCreateInput"
+                                          placeholder="پاسخ"></textarea>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group col-8 mt-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-map-marker-alt"></i></span>
+                                </div>
+                                <textarea class="form-control" id="pointQuestionCreateInput"
+                                          placeholder="نمره"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-6 mt-3 text-center">
+                            <button type="button" class="btn btn-success" onclick="createNewQuestion()">ایجاد
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel"
+     aria-hidden="true" id="editNewQuestionModal">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">ویرایش سوال</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="questionEditForm">
+                    <div class="form-row justify-content-center">
+                        <div class="form-group col-8 mt-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-user"></i></span>
+                                </div>
+                                <input type="text" class="form-control" id="titleQuestionEditInput"
+                                       placeholder="عنوان">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-8 mt-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-map-marker-alt"></i></span>
+                                </div>
+                                <textarea class="form-control" id="textQuestionEditInput"
+                                          placeholder="متن"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-8 mt-3">
+                            <select class="custom-select" id="questionTypeEditSelect"
+                                    onchange="questionTypeEditChange()">
+                                <option selected>نوع سوال</option>
+                                <option value="descriptive">تشریحی</option>
+                                <option value="multiple-choice">چند گزینه ای</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-8 mt-3" id="multipleChoiceQuestionContentEdit">
+
+                        </div>
+
+                        <div class="form-group col-8 mt-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-map-marker-alt"></i></span>
+                                </div>
+                                <textarea class="form-control" id="answerQuestionEditInput"
+                                          placeholder="پاسخ"></textarea>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group col-8 mt-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-map-marker-alt"></i></span>
+                                </div>
+                                <textarea class="form-control" id="pointQuestionEditInput"
+                                          placeholder="نمره"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-6 mt-3 text-center">
+                            <button type="button" class="btn btn-success" onclick="editQuestion()">ویرایش
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -2,6 +2,7 @@ $("#menu-toggle").click(function (e) {
     e.preventDefault();
     $("#wrapper").toggleClass("toggled");
 });
+
 $('#app-content-load').load('/components/panels/teacher/home/teacher-home.html');
 
 function loadPage(page) {
@@ -13,6 +14,13 @@ function loadPage(page) {
         $('#app-content-load').load('/components/panels/teacher/teacher-courses/teacher-courses.html');
     }
 
+    if (page === 'question-management') {
+        $('#app-content-load').load('/components/panels/teacher/teacher-courses/question-management/question-management.html');
+    }
+
+    if (page === 'teacher-question-bank') {
+        $('#app-content-load').load('/components/panels/teacher/teacher-courses/question-management/add-question-to-exam-from-question-bank/add-question-to-exam-from-question-bank.html');
+    }
 }
 
 function getSecondPart(str) {

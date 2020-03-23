@@ -23,6 +23,8 @@ public class Course {
     private String courseName;
 
     @ManyToMany
+    @ToString.Exclude
+    @JsonIgnoreProperties({"courses"})
     @JoinTable(
             name = "courses_lessons",
             joinColumns = @JoinColumn(

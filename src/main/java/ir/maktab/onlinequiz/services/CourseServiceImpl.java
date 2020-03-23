@@ -258,7 +258,8 @@ public class CourseServiceImpl implements CourseService {
                     createExamDTO.getTitle(),
                     createExamDTO.getDescription(),
                     createExamDTO.getTime(),
-                    course
+                    course,
+                    null
             );
             List<Exam> exams = new ArrayList<>();
             exams.add(exam);

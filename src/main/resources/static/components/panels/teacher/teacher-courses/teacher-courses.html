@@ -293,72 +293,9 @@
 </div>
 
 
-<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel"
-     aria-hidden="true" id="addNewQuestionModal">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">ایجاد سوال</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="questionCreateForm">
-                    <div class="form-row justify-content-center">
-                        <div class="form-group col-8 mt-3">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fa fa-user"></i></span>
-                                </div>
-                                <input type="text" class="form-control" id="titleQuestionCreateInput"
-                                       placeholder="عنوان">
-                            </div>
-                        </div>
-
-                        <div class="form-group col-8 mt-3">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fa fa-map-marker-alt"></i></span>
-                                </div>
-                                <textarea class="form-control" id="textQuestionCreateInput"
-                                          placeholder="متن"></textarea>
-                            </div>
-                        </div>
-
-                        <div class="form-group col-8 mt-3">
-                                <select class="custom-select" id="questionTypeCreateSelect" onchange="questionTypeCreateChange()">
-                                    <option selected>نوع سوال</option>
-                                    <option value="descriptive">تشریحی</option>
-                                    <option value="multipleChoice">چند گزینه ای</option>
-                                </select>
-                        </div>
-
-                        <div id="multipleChoiceQuestionContent">
-
-                        </div>
 
 
-                        <div class="form-group col-8 mt-3">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fa fa-map-marker-alt"></i></span>
-                                </div>
-                                <textarea class="form-control" id="answerQuestionCreateInput"
-                                          placeholder="پاسخ"></textarea>
-                            </div>
-                        </div>
 
-                        <div class="form-group col-6 mt-3 text-center">
-                            <button type="button" class="btn btn-success" onclick="createNewQuestion()">ایجاد
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 
 <script src="/utils/persianCalender/persianDatepicker.js"></script>
 <script src="/utils/persianCalender/persianCalendar.js"></script>
