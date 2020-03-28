@@ -110,4 +110,14 @@ public class QuestionServiceImpl implements QuestionService {
             }
         }
     }
+
+    @Override
+    public List<DescriptiveQuestion> descriptiveQuestionPaginateStudent(Long examId) {
+        return descriptiveQuestionDAO.findAllByExam_Id(examId);
+    }
+
+    @Override
+    public List<MultipleChoiceQuestion> multipleChoiceQuestionPaginateStudent(Long examId) {
+        return multipleChoiceQuestionDAO.findAllByExam_Id(examId);
+    }
 }

@@ -33,7 +33,7 @@ public class Question {
     private String answer;
 
     @ToString.Exclude
-    @JsonIgnoreProperties({"question"})
+    @JsonIgnoreProperties({"question","studentAnswers"})
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private List<Score> scoreList = new ArrayList<>();
 
@@ -47,4 +47,8 @@ public class Question {
     @JsonIgnoreProperties({"questions", "course"})
     @ManyToMany(mappedBy = "questions")
     private List<Exam> exam;
+
+    @OneToMany(mappedBy = "question", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JsonIgnoreProperties({"question"})
+    private List<StudentAnswer> studentAnswers;
 }

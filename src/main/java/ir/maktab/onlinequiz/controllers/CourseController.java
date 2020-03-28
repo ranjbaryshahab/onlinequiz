@@ -131,4 +131,9 @@ public class CourseController {
     private void deleteAllExamsOfCourse(@RequestBody IdsListDTO idsListDTO) {
         courseService.deleteAllExamsOfCourse(idsListDTO);
     }
+
+    @PostMapping("/student/student-course/{username}/{pageNo}/{pageSize}")
+    private Page<Course> studentCourse(@PathVariable String username, @PathVariable int pageNo, @PathVariable int pageSize) {
+        return courseService.findByStudents_And_Account_Username(username, PageRequest.of(pageNo, pageSize));
+    }
 }

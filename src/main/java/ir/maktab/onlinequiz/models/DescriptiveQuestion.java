@@ -18,7 +18,7 @@ public class DescriptiveQuestion extends Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    public DescriptiveQuestion(Long id, String text, String title, String answer, List<Score> scoreList, Teacher teacherCreator,List<Exam> exams) {
-        super(id, text, title, answer, scoreList, teacherCreator,exams);
+    public DescriptiveQuestion(Long id, String text, String title, String answer, List<Score> scoreList, Teacher teacherCreator, List<Exam> exams, List<StudentAnswer> studentAnswers) {
+        super(id, text, title, answer, scoreList, teacherCreator, exams, studentAnswers);
     }
 }

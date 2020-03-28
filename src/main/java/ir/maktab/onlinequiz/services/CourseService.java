@@ -69,4 +69,7 @@ public interface CourseService {
 
     @Secured("ROLE_TEACHER")
     void deleteAllExamsOfCourse(IdsListDTO idsListDTO);
+
+    @Secured("ROLE_STUDENT")
+    Page<Course> findByStudents_And_Account_Username(String username, Pageable pageable);
 }

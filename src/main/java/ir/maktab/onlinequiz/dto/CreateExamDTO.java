@@ -11,6 +11,6 @@ public class CreateExamDTO {
     private String examId;
     private String courseId;
     private String title;
-    private Integer time;
+    private String time;
     private String description;
 }

@@ -1,5 +1,6 @@
 package ir.maktab.onlinequiz;
 
+import ir.maktab.onlinequiz.dao.CourseDAO;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

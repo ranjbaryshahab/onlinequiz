@@ -8,16 +8,15 @@ import ir.maktab.onlinequiz.dto.IdsListDTO;
 import ir.maktab.onlinequiz.models.*;
 import ir.maktab.onlinequiz.outcome.CourseDrawOutcome;
 import ir.maktab.onlinequiz.specification.CourseSpecification;
+import ir.maktab.onlinequiz.utils.MyTime;
 import ir.maktab.onlinequiz.validations.StartAndEndDateCourseValidate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalTime;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -28,13 +27,15 @@ public class CourseServiceImpl implements CourseService {
     final StudentDAO studentDAO;
     final TeacherDAO teacherDAO;
     final CourseSpecification courseSpecification;
+    final ExamDAO examDAO;
 
-    public CourseServiceImpl(CourseDAO courseDAO, LessonDAO lessonDAO, StudentDAO studentDAO, TeacherDAO teacherDAO, CourseSpecification courseSpecification) {
+    public CourseServiceImpl(CourseDAO courseDAO, LessonDAO lessonDAO, StudentDAO studentDAO, TeacherDAO teacherDAO, CourseSpecification courseSpecification, ExamDAO examDAO) {
         this.courseDAO = courseDAO;
         this.lessonDAO = lessonDAO;
         this.studentDAO = studentDAO;
         this.teacherDAO = teacherDAO;
         this.courseSpecification = courseSpecification;
+        this.examDAO = examDAO;
     }
 
     @Override
@@ -257,8 +258,11 @@ public class CourseServiceImpl implements CourseService {
                     null,
                     createExamDTO.getTitle(),
                     createExamDTO.getDescription(),
-                    createExamDTO.getTime(),
+                    MyTime.convertStringToTime(createExamDTO.getTime()),
+                    false,
+                    false,
                     course,
+                    null,
                     null
             );
             List<Exam> exams = new ArrayList<>();
@@ -293,7 +297,10 @@ public class CourseServiceImpl implements CourseService {
                         .map(Long::parseLong)
                         .collect(Collectors.toList());
 
+                course.getExams().stream().filter(exam -> ids.contains(exam.getId())).collect(Collectors.toList()).
+                        forEach(exam -> exam.setCourse(null));
                 course.getExams().removeIf(exam -> ids.contains(exam.getId()));
+
             }
             courseDAO.save(course);
         }
@@ -305,9 +312,25 @@ public class CourseServiceImpl implements CourseService {
         if (courseOptional.isPresent()) {
             Course course = courseOptional.get();
             if (course.getExams() != null && !course.getExams().isEmpty()) {
+                course.getExams().forEach(exam -> exam.setCourse(null));
                 course.getExams().removeAll(course.getExams());
             }
             courseDAO.save(course);
         }
     }
+
+    @Override
+    public Page<Course> findByStudents_And_Account_Username(String username, Pageable pageable) {
+        Optional<Student> studentOptional = studentDAO.findByAccount_Username(username);
+        if (studentOptional.isPresent()) {
+            Student student = studentOptional.get();
+            List<Student> students = new ArrayList<>();
+            students.add(student);
+            return courseDAO.findAllByStudentsIn(students, pageable);
+        }
+        return null;
+    }
+
+
 }
+

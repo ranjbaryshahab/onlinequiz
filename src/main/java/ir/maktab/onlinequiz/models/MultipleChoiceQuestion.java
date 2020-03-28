@@ -21,8 +21,9 @@ public class MultipleChoiceQuestion extends Question {
     @ElementCollection
     private List<String> options;
 
-    public MultipleChoiceQuestion(Long id, String text, String title, String answer, List<Score> scoreList, Teacher teacherCreator, List<Exam> exams, List<String> options) {
-        super(id, text, title, answer, scoreList, teacherCreator, exams);
+    public MultipleChoiceQuestion(Long id, String text, String title, String answer, List<Score> scoreList, Teacher teacherCreator, List<Exam> exams, List<String> options,
+                                  List<StudentAnswer> studentAnswers) {
+        super(id, text, title, answer, scoreList, teacherCreator, exams, studentAnswers);
         this.options = options;
     }
 }

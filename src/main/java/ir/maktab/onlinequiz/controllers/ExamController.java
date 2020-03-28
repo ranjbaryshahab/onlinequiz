@@ -1,11 +1,11 @@
 package ir.maktab.onlinequiz.controllers;
 
+import ir.maktab.onlinequiz.dto.AnswersExamDTO;
+import ir.maktab.onlinequiz.dto.CreateExamDTO;
 import ir.maktab.onlinequiz.dto.IdsListDTO;
 import ir.maktab.onlinequiz.dto.QuestionDTO;
 import ir.maktab.onlinequiz.services.ExamService;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -36,5 +36,25 @@ public class ExamController {
     @PostMapping("/teacher/teacher-course/exam/{examId}/questions/delete-all")
     private void deleteAllQuestions(@PathVariable Long examId) {
         examService.deleteAllQuestionOfExam(examId);
+    }
+
+    @PostMapping("/teacher/teacher-course/edit-exam-from-course")
+    private void editExam(@RequestBody CreateExamDTO createExamDTO) {
+        examService.editExam(createExamDTO);
+    }
+
+    @PostMapping("/teacher/teacher-course/start-exam/{id}")
+    private void startExam(@PathVariable Long id) {
+         examService.startExam(id);
+    }
+
+    @GetMapping("/student/student-course/exam/get-time/{id}")
+    private Long getExamTime(@PathVariable Long id) {
+        return examService.getExamTime(id);
+    }
+
+    @PostMapping("/student/student-course/exam/answer/{examId}")
+    private void addAnswerByStudent(@PathVariable Long examId, @RequestBody AnswersExamDTO answersExamDTO) {
+        examService.addAnswerByStudent(examId, answersExamDTO);
     }
 }

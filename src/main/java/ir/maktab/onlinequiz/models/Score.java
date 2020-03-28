@@ -20,11 +20,12 @@ public class Score {
     private Float point;
 
     @ManyToOne
+    @JsonIgnoreProperties({"scoreList","exam","studentAnswers"})
     @JoinColumn(name = "questionId")
     private Question question;
 
     @ManyToOne
-    @JsonIgnoreProperties({"questions","exam","course"})
+    @JsonIgnoreProperties({"questions","exam","course","studentAnswers"})
     @JoinColumn(name = "exam_id")
     private Exam exam;
 }

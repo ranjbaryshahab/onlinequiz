@@ -1,16 +1,15 @@
 package ir.maktab.onlinequiz.services;
 
 import ir.maktab.onlinequiz.dao.ExamDAO;
+import ir.maktab.onlinequiz.dao.MultipleChoiceQuestionDAO;
 import ir.maktab.onlinequiz.dao.QuestionDAO;
-import ir.maktab.onlinequiz.dto.IdsListDTO;
-import ir.maktab.onlinequiz.dto.QuestionDTO;
+import ir.maktab.onlinequiz.dao.StudentDAO;
+import ir.maktab.onlinequiz.dto.*;
 import ir.maktab.onlinequiz.models.*;
+import ir.maktab.onlinequiz.utils.MyTime;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -18,10 +17,14 @@ import java.util.stream.Stream;
 public class ExamServiceImpl implements ExamService {
     final ExamDAO examDAO;
     final QuestionDAO questionDAO;
+    final StudentDAO studentDAO;
+    final MultipleChoiceQuestionDAO multipleChoiceQuestionDAO;
 
-    public ExamServiceImpl(ExamDAO examDAO, QuestionDAO questionDAO) {
+    public ExamServiceImpl(ExamDAO examDAO, QuestionDAO questionDAO, StudentDAO studentDAO, MultipleChoiceQuestionDAO multipleChoiceQuestionDAO) {
         this.examDAO = examDAO;
         this.questionDAO = questionDAO;
+        this.studentDAO = studentDAO;
+        this.multipleChoiceQuestionDAO = multipleChoiceQuestionDAO;
     }
 
     @Override
@@ -110,5 +113,88 @@ public class ExamServiceImpl implements ExamService {
             }
             examDAO.save(exam);
         }
+    }
+
+    @Override
+    public void editExam(CreateExamDTO createExamDTO) {
+        Optional<Exam> examOptional = examDAO.findById(Long.parseLong(createExamDTO.getExamId()));
+        if (examOptional.isPresent()) {
+            Exam exam = examOptional.get();
+            exam.setTime(MyTime.convertStringToTime(createExamDTO.getTime()));
+            exam.setDescription(createExamDTO.getDescription());
+            exam.setTitle(createExamDTO.getTitle());
+            examDAO.save(exam);
+        }
+    }
+
+    @Override
+    public Long getExamTime(Long id) {
+        Optional<Exam> examOptional = examDAO.findById(id);
+        if (examOptional.isPresent()) {
+            Exam exam = examOptional.get();
+            long hour = exam.getTime().getHour();
+            long minute = exam.getTime().getMinute();
+            long second = exam.getTime().getSecond();
+            return hour * 3600 * 1000 + minute * 60 * 1000 + second * 1000;
+        }
+        return 0L;
+    }
+
+    @Override
+    public void addAnswerByStudent(Long examId, AnswersExamDTO answersExamDTO) {
+        Optional<Exam> examOptional = examDAO.findById(examId);
+        if (examOptional.isPresent()) {
+            Exam exam = examOptional.get();
+            Optional<Student> studentOptional = studentDAO.findByAccount_Username(answersExamDTO.getStudentUsername());
+            if (studentOptional.isPresent()) {
+                Student student = studentOptional.get();
+                boolean isCorrect = false;
+                Score score = null;
+                for (AddAnswerDTO addAnswerDTO : answersExamDTO.getAddAnswersDTO()) {
+                    if (exam.getStudentAnswers()
+                            .stream()
+                            .noneMatch(studentAnswer -> studentAnswer.getExam().getId().equals(examId) && studentAnswer.getStudent().getId().equals(student.getId()))) {
+                        if (addAnswerDTO.getQuestionType().equals("multiple-choice")) {
+                            Optional<MultipleChoiceQuestion> multipleChoiceQuestionOptional = multipleChoiceQuestionDAO.findById(addAnswerDTO.getQuestionId());
+                            if (multipleChoiceQuestionOptional.isPresent()) {
+                                MultipleChoiceQuestion multipleChoiceQuestion = multipleChoiceQuestionOptional.get();
+                                if (multipleChoiceQuestion.getAnswer().equals(addAnswerDTO.getContext())) {
+                                    isCorrect = true;
+                                    score = multipleChoiceQuestion.getScoreList().stream().filter(score1 -> score1.getExam().getId().equals(exam.getId())).findAny().get();
+                                }
+                            }
+                        }
+                        boolean finalIsCorrect = isCorrect;
+                        Score finalScore = score;
+                        exam.getQuestions()
+                                .stream()
+                                .filter(question -> question.getId().equals(addAnswerDTO.getQuestionId()))
+                                .findAny()
+                                .ifPresent(question -> {
+                                            if (question.getStudentAnswers().isEmpty()) {
+                                                List<StudentAnswer> studentAnswers = new LinkedList<>();
+                                                studentAnswers.add(new StudentAnswer(null, addAnswerDTO.getContext(), finalIsCorrect, student, exam, question, finalScore));
+                                                question.setStudentAnswers(studentAnswers);
+                                            } else
+                                                question.getStudentAnswers().add(new StudentAnswer(null, addAnswerDTO.getContext(), finalIsCorrect, student, exam, question, finalScore));
+                                        }
+                                );
+                    }
+                    examDAO.save(exam);
+                }
+            }
+        }
+
+    }
+
+    @Override
+    public void startExam(Long id) {
+        Optional<Exam> examOptional = examDAO.findById(id);
+        examOptional.ifPresent(
+                exam -> {
+                    exam.setStarted(true);
+                    examDAO.save(exam);
+                }
+        );
     }
 }

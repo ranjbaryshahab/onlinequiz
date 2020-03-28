@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.annotation.Secured;
 
+import java.util.List;
+
 public interface QuestionService {
 
     @Secured("ROLE_TEACHER")
@@ -23,4 +25,10 @@ public interface QuestionService {
 
     @Secured("ROLE_TEACHER")
     void editQuestion(QuestionDTO questionDTO);
+
+    @Secured("ROLE_STUDENT")
+    List<DescriptiveQuestion> descriptiveQuestionPaginateStudent(Long examId);
+
+    @Secured("ROLE_STUDENT")
+    List<MultipleChoiceQuestion> multipleChoiceQuestionPaginateStudent(Long examId);
 }

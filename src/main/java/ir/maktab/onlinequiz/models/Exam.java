@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,15 +24,19 @@ public class Exam {
 
     private String description;
 
-    private Integer time;
+    private LocalTime time;
+
+    private boolean isEnded;
+
+    private boolean isStarted;
 
     @ManyToOne
     @JsonIgnoreProperties({"exam"})
     @JoinColumn(name = "course_id")
     private Course course;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JsonIgnoreProperties({"question","exam"})
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JsonIgnoreProperties({"question", "exam"})
     @ToString.Exclude
     @JoinTable(
             name = "exams_questions",
@@ -40,4 +45,8 @@ public class Exam {
             inverseJoinColumns = @JoinColumn(
                     name = "question_id", referencedColumnName = "id"))
     private List<Question> questions = new ArrayList<>();
+
+    @OneToMany(mappedBy = "exam")
+    @JsonIgnoreProperties({"scoreList"})
+    private List<StudentAnswer> studentAnswers;
 }

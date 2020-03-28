@@ -157,7 +157,14 @@ function showExamCourseManagementModal(id) {
                 content += "<td >" + exam[j].title + "</td>";
                 content += "<td >" + exam[j].time + "</td>";
                 content += "<td >" + exam[j].description + "</td>";
-                content += '<td><button type="button" class="btn btn-primary btn-sm mr-2" onclick="questionManagement(\'' + exam[j].id + '\')">سوالات</button>' + '</td>';
+                if(!exam[j].started){
+                    content += '<td><button type="button" class="btn btn-primary btn-sm mr-2" onclick="questionManagement(\'' + exam[j].id + '\')">سوالات</button>';
+                    content += '<button type="button" class="btn btn-warning btn-sm mr-2" onclick="showEditExamModal(\'' + exam[j].id + '\')">ویرایش</button>';
+                    content += '<button type="button" class="btn btn-success btn-sm mr-2" onclick="startExam(\'' + exam[j].id + '\')">شروع آزمون</button>' + '</td>';
+                }else {
+                    content += '<td><button type="button" class="btn btn-primary btn-sm mr-2" onclick="questionManagement(\'' + exam[j].id + '\')">سوالات</button>';
+                    content += '<button type="button" class="btn btn-warning btn-sm mr-2" onclick="showEditExamModal(\'' + exam[j].id + '\')">ویرایش</button>' + '</td>';
+                }
                 content += "</tr>";
             }
         }
@@ -260,4 +267,66 @@ function deleteAllExamsOfCourse() {
 function questionManagement(id) {
     window.questionListExamId = id;
     loadPage('question-management');
+}
+
+function showEditExamModal(id) {
+    window.editExamId = id;
+    for (let i = 0; i < courseData.data.content.length; i++) {
+        let exam = courseData.data.content[i].exams;
+        for (let j = 0; j < exam.length; j++) {
+            if (id.toString() === exam[j].id.toString()) {
+                $('#titleExamEditInput').val(exam[j].title);
+                $('#timeExamEditInput').val(exam[j].time);
+                $('#descriptionExamEditInput').val(exam[j].description);
+            }
+        }
+    }
+    $('#editExamFromCourseModal').modal('show');
+}
+
+function editExam() {
+    $('#editExamFromCourseModal').modal('hide');
+    let editExam = {
+        "examId": window.editExamId,
+        "courseId": window.courseIdExamModal,
+        "title": $("#titleExamEditInput").val(),
+        "time": $("#timeExamEditInput").val(),
+        "description": $("#descriptionExamEditInput").val(),
+    };
+
+    jQuery.ajax({
+        url: "http://localhost:7777/teacher/teacher-course/edit-exam-from-course",
+        type: "POST",
+        data: JSON.stringify(editExam),
+        contentType: "application/json; charset=utf-8",
+        headers: {
+            "Authorization": "Basic " + btoa(usernameHeader + ":" + passwordHeader)
+        },
+        success: function (data, textStatus, jQxhr) {
+            $('#addExamToCourseModal').modal('hide');
+            showAlert('success', 'عملیات با موفقیت انجام شد');
+            loadPage('teacher-courses');
+        },
+        error: function (errorMessage) {
+            //alert(errorMessage)
+        }
+    });
+}
+
+function startExam(id) {
+    jQuery.ajax({
+        url: "http://localhost:7777/teacher/teacher-course/start-exam/" + id,
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        headers: {
+            "Authorization": "Basic " + btoa(usernameHeader + ":" + passwordHeader)
+        },
+        success: function (data, textStatus, jQxhr) {
+            $('#addExamToCourseModal').modal('hide');
+            showAlert('success', 'عملیات با موفقیت انجام شد');
+            loadPage('teacher-courses');        },
+        error: function (errorMessage) {
+            //alert(errorMessage)
+        }
+    });
 }

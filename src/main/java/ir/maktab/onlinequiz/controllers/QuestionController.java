@@ -1,19 +1,14 @@
 package ir.maktab.onlinequiz.controllers;
 
-import ir.maktab.onlinequiz.dto.IdsListDTO;
 import ir.maktab.onlinequiz.dto.QuestionDTO;
-import ir.maktab.onlinequiz.models.Course;
 import ir.maktab.onlinequiz.models.DescriptiveQuestion;
 import ir.maktab.onlinequiz.models.MultipleChoiceQuestion;
-import ir.maktab.onlinequiz.models.Question;
 import ir.maktab.onlinequiz.services.QuestionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.stream.Collectors;
+import java.util.List;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -49,5 +44,15 @@ public class QuestionController {
     @PostMapping("/teacher/teacher-course/edit-question")
     private void editQuestion(@RequestBody QuestionDTO questionDTO) {
         questionService.editQuestion(questionDTO);
+    }
+
+    @PostMapping("/student/student-course/exam/question-list/multiple-choice/{examId}")
+    private List<MultipleChoiceQuestion> multipleQuestionPaginateStudent(@PathVariable Long examId) {
+        return questionService.multipleChoiceQuestionPaginateStudent(examId);
+    }
+
+    @PostMapping("/student/student-course/exam/question-list/descriptive/{examId}")
+    private List<DescriptiveQuestion> descriptiveQuestionPaginateStudent(@PathVariable Long examId) {
+        return questionService.descriptiveQuestionPaginateStudent(examId);
     }
 }

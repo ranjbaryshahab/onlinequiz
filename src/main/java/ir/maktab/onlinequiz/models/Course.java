@@ -55,6 +55,6 @@ public class Course {
 
     @JsonIgnoreProperties({"course"})
     @ToString.Exclude
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     private List<Exam> exams;
 }

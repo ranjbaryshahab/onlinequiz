@@ -266,8 +266,8 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fa fa-map-marker-alt"></i></span>
                                 </div>
-                                <textarea class="form-control" id="timeExamCreateInput"
-                                          placeholder="زمان"></textarea>
+                                <input class="form-control" id="timeExamCreateInput"
+                                          placeholder="زمان">
                             </div>
                         </div>
 
@@ -292,6 +292,60 @@
     </div>
 </div>
 
+
+<div class="modal fade editExamFromCourseModal" tabindex="-1" role="dialog" aria-labelledby="editExamFromCourseModalLabel"
+     aria-hidden="true" id="editExamFromCourseModal">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">ویرایش آزمون</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="examEditForm">
+                    <div class="form-row justify-content-center">
+                        <div class="form-group col-8 mt-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-user"></i></span>
+                                </div>
+                                <input type="text" class="form-control" id="titleExamEditInput"
+                                       placeholder="عنوان">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-8 mt-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-map-marker-alt"></i></span>
+                                </div>
+                                <input class="form-control" id="timeExamEditInput"
+                                       placeholder="زمان">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-8 mt-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-map-marker-alt"></i></span>
+                                </div>
+                                <textarea class="form-control" id="descriptionExamEditInput"
+                                          placeholder="توضیحات"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-6 mt-3 text-center">
+                            <button type="button" class="btn btn-success" onclick="editExam()">ویرایش
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
