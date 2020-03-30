@@ -108,10 +108,11 @@ function showExamCourseManagementModal(id) {
                 let answer = true;
                 let studentAnswer = exam[j].studentAnswers;
                 for (let k = 0; k < studentAnswer.length; k++) {
-                    if (studentAnswer[k].exam.id === exam[j].id && studentAnswer[k].student.account.username === usernameHeader)
+                    if (studentAnswer[k].exam.id === exam[j].id && studentAnswer[k].student.account.username === usernameHeader) {
                         answer = false;
+                        window.studentId = studentAnswer[k].student.id;
+                    }
                 }
-
                 content += "<tr>";
                 content += "<td>" + exam[j].id + "</td>";
                 content += "<td >" + exam[j].title + "</td>";
@@ -133,4 +134,28 @@ function showExamCourseManagementModal(id) {
 function startExamByStudent(id) {
     window.globalExamStartedIdForStudent = id;
     loadPage('start-exam');
+}
+
+function showScoreExam(id) {
+    jQuery.ajax({
+        url: "http://localhost:7777/student/" + window.studentId + "/student-course/exam/" + id + "/score",
+        type: "GET",
+        contentType: "application/json; charset=utf-8",
+        headers: {
+            "Authorization": "Basic " + btoa(usernameHeader + ":" + passwordHeader)
+        },
+        success: function (data, textStatus, jQxhr) {
+            let content = '';
+            content += "<tr>";
+            content += "<td>" + data.multipleChoicesQuestionScore + "</td>";
+            content += "<td>" + data.descriptiveQuestionScore + "</td>";
+            content += "<td>" + data.finalScore + "</td>";
+            content += "</tr>";
+            $('#myScore').html(content);
+        },
+        error: function (errorMessage) {
+            //alert(errorMessage)
+        }
+    });
+    $('#scoreExamModal').modal('show');
 }

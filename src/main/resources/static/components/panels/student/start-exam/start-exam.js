@@ -1,12 +1,14 @@
 $("#questionsList").ready(function () {
-    if (window.isEnabled) {
-        getDuration();
-        getQuestion("descriptive");
-        getQuestion("multiple-choice");
-    }
+            getDuration();
+            getQuestion("descriptive");
+            getQuestion("multiple-choice");
+            $('#action').html(`<div class="form-row justify-content-center">
+            <div class="form-group col-6 mt-3 text-center">
+                <button type="button" class="btn btn-success" onclick="submitAnswersByStudentButton()" id="submitAnswersByStudent">ثبت آزمون
+                </button>
+            </div>
+        </div>`);
 });
-
-window.isEnabled = true;
 
 function getQuestion(questionType) {
     jQuery.ajax({
@@ -71,7 +73,7 @@ function prepareFormDescriptive(data) {
                                 <span class="input-group-text">
                                     <i class="fa fa-key"></i>
                                 </span>
-                                    <textarea class="form-control" id="` + data[i].id + `"placeholder="پاسخ"></textarea>          
+                                    <textarea class="form-control" id="` + data[i].id + `" placeholder="پاسخ"></textarea>          
                              </div>
                       </div>`;
     }
@@ -200,7 +202,6 @@ function submitAnswersByStudent() {
         "addAnswersDTO": answers,
         "submitStudent": window.submitExamByStudent
     };
-    console.log(answersExamDTO);
     jQuery.ajax({
         url: "http://localhost:7777/student/student-course/exam/answer/" + window.globalExamStartedIdForStudent,
         type: "POST",

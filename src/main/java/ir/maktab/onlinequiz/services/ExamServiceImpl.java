@@ -179,12 +179,23 @@ public class ExamServiceImpl implements ExamService {
                                                 question.getStudentAnswers().add(new StudentAnswer(null, addAnswerDTO.getContext(), finalIsCorrect, student, exam, question, finalScore));
                                         }
                                 );
+                        examDAO.save(exam);
                     }
-                    examDAO.save(exam);
                 }
             }
         }
 
+    }
+
+    @Override
+    public void endExam(Long id) {
+        Optional<Exam> examOptional = examDAO.findById(id);
+        examOptional.ifPresent(
+                exam -> {
+                    exam.setEnded(true);
+                    examDAO.save(exam);
+                }
+        );
     }
 
     @Override

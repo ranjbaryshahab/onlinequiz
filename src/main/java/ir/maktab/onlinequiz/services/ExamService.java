@@ -27,4 +27,7 @@ public interface ExamService {
 
     @Secured("ROLE_STUDENT")
     void addAnswerByStudent(Long examId, AnswersExamDTO answersExamDTO);
+
+    @Secured("ROLE_TEACHER")
+    void endExam(Long id);
 }

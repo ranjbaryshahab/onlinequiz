@@ -45,7 +45,12 @@ public class ExamController {
 
     @PostMapping("/teacher/teacher-course/start-exam/{id}")
     private void startExam(@PathVariable Long id) {
-         examService.startExam(id);
+        examService.startExam(id);
+    }
+
+    @PostMapping("/teacher/teacher-course/end-exam/{id}")
+    private void endExam(@PathVariable Long id) {
+        examService.endExam(id);
     }
 
     @GetMapping("/student/student-course/exam/get-time/{id}")

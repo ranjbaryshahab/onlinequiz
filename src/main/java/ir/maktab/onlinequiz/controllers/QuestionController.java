@@ -48,11 +48,22 @@ public class QuestionController {
 
     @PostMapping("/student/student-course/exam/question-list/multiple-choice/{examId}")
     private List<MultipleChoiceQuestion> multipleQuestionPaginateStudent(@PathVariable Long examId) {
-        return questionService.multipleChoiceQuestionPaginateStudent(examId);
+        return questionService.multipleChoiceQuestionPaginate(examId);
     }
 
     @PostMapping("/student/student-course/exam/question-list/descriptive/{examId}")
     private List<DescriptiveQuestion> descriptiveQuestionPaginateStudent(@PathVariable Long examId) {
-        return questionService.descriptiveQuestionPaginateStudent(examId);
+        return questionService.descriptiveQuestionPaginate(examId);
     }
+
+    @PostMapping("/teacher/teacher-course/exam/question-list/multiple-choice/{examId}")
+    private List<MultipleChoiceQuestion> multipleQuestionPaginateTeacher(@PathVariable Long examId) {
+        return questionService.multipleChoiceQuestionPaginate(examId);
+    }
+
+    @PostMapping("/teacher/teacher-course/exam/question-list/descriptive/{examId}")
+    private List<DescriptiveQuestion> descriptiveQuestionPaginateTeacher(@PathVariable Long examId) {
+        return questionService.descriptiveQuestionPaginate(examId);
+    }
+
 }

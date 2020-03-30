@@ -157,13 +157,19 @@ function showExamCourseManagementModal(id) {
                 content += "<td >" + exam[j].title + "</td>";
                 content += "<td >" + exam[j].time + "</td>";
                 content += "<td >" + exam[j].description + "</td>";
-                if(!exam[j].started){
+                if (!exam[j].started) {
                     content += '<td><button type="button" class="btn btn-primary btn-sm mr-2" onclick="questionManagement(\'' + exam[j].id + '\')">سوالات</button>';
                     content += '<button type="button" class="btn btn-warning btn-sm mr-2" onclick="showEditExamModal(\'' + exam[j].id + '\')">ویرایش</button>';
                     content += '<button type="button" class="btn btn-success btn-sm mr-2" onclick="startExam(\'' + exam[j].id + '\')">شروع آزمون</button>' + '</td>';
-                }else {
+                } else if (exam[j].started && exam[j].ended) {
                     content += '<td><button type="button" class="btn btn-primary btn-sm mr-2" onclick="questionManagement(\'' + exam[j].id + '\')">سوالات</button>';
-                    content += '<button type="button" class="btn btn-warning btn-sm mr-2" onclick="showEditExamModal(\'' + exam[j].id + '\')">ویرایش</button>' + '</td>';
+                    content += '<button type="button" class="btn btn-warning btn-sm mr-2" onclick="showEditExamModal(\'' + exam[j].id + '\')">ویرایش</button>';
+                    content += '<button type="button" class="btn btn-info btn-sm mr-2" onclick="studentSubmitted(\'' + exam[j].id + '\')">شرکت کنندگان</button>' + '</td>';
+                } else if (exam[j].started && !exam[j].ended) {
+                    content += '<td><button type="button" class="btn btn-primary btn-sm mr-2" onclick="questionManagement(\'' + exam[j].id + '\')">سوالات</button>';
+                    content += '<button type="button" class="btn btn-warning btn-sm mr-2" onclick="showEditExamModal(\'' + exam[j].id + '\')">ویرایش</button>';
+                    content += '<button type="button" class="btn btn-danger btn-sm mr-2" onclick="endExam(\'' + exam[j].id + '\')">اتمام آزمون</button>';
+
                 }
                 content += "</tr>";
             }
@@ -324,9 +330,96 @@ function startExam(id) {
         success: function (data, textStatus, jQxhr) {
             $('#addExamToCourseModal').modal('hide');
             showAlert('success', 'عملیات با موفقیت انجام شد');
-            loadPage('teacher-courses');        },
+            loadPage('teacher-courses');
+        },
         error: function (errorMessage) {
             //alert(errorMessage)
         }
     });
+}
+
+function endExam(id) {
+    jQuery.ajax({
+        url: "http://localhost:7777/teacher/teacher-course/end-exam/" + id,
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        headers: {
+            "Authorization": "Basic " + btoa(usernameHeader + ":" + passwordHeader)
+        },
+        success: function (data, textStatus, jQxhr) {
+            $('#addExamToCourseModal').modal('hide');
+            showAlert('success', 'عملیات با موفقیت انجام شد');
+            loadPage('teacher-courses');
+        },
+        error: function (errorMessage) {
+            //alert(errorMessage)
+        }
+    });
+}
+
+function studentSubmitted(id) {
+    jQuery.ajax({
+        url: "http://localhost:7777/teacher/teacher-course/exam/student/answer/" + id,
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        headers: {
+            "Authorization": "Basic " + btoa(usernameHeader + ":" + passwordHeader)
+        },
+        success: function (data, textStatus, jQxhr) {
+            $('#examsCourseManagementModal').modal('hide');
+            showSubmittedStudentsModal(data, id);
+        },
+        error: function (errorMessage) {
+            //alert(errorMessage)
+        }
+    });
+}
+
+function showSubmittedStudentsModal(data, id) {
+    let content = '';
+    let studentSubmittedExamOutcomeList = data.studentSubmittedExamOutcomeList;
+    for (let j = 0; j < studentSubmittedExamOutcomeList.length; j++) {
+        content += "<tr>";
+        content += "<td>" + studentSubmittedExamOutcomeList[j].studentId + "</td>";
+        content += "<td >" + studentSubmittedExamOutcomeList[j].studentFirstName + "</td>";
+        content += "<td >" + studentSubmittedExamOutcomeList[j].studentLastName + "</td>";
+        content += "<td >" + studentSubmittedExamOutcomeList[j].studentCode + "</td>";
+        content += "<td >" + '<button type="button" class="btn btn-success btn-sm mr-2" onclick="seeExamPageAndAddPoint(\'' + studentSubmittedExamOutcomeList[j].studentId + '\' , \'' + id + '\')">مشاهده آزمون و ثبت نمره</button>';
+        content += '<button type="button" class="btn btn-info btn-sm mr-2" onclick="showScoreExam(\'' + studentSubmittedExamOutcomeList[j].studentId + '\' , \'' + id + '\')">نمره</button>' + '</td>';
+        content += "</tr>";
+
+        $('#studentSubmittedExamList').html(content);
+    }
+    $('#studentSubmittedExamManagementModal').modal('show');
+}
+
+function seeExamPageAndAddPoint(studentId, examId) {
+    window.seeExamPageExamId = examId;
+    window.seeExamPageStudentId = studentId;
+    $('#studentSubmittedExamManagementModal').modal('hide');
+    loadPage('student-exam-page');
+}
+
+function showScoreExam(studentId, examId) {
+    jQuery.ajax({
+        url: "http://localhost:7777/teacher/student-course/exam/" + examId + "/" + studentId + "/score",
+        type: "GET",
+        contentType: "application/json; charset=utf-8",
+        headers: {
+            "Authorization": "Basic " + btoa(usernameHeader + ":" + passwordHeader)
+        },
+        success: function (data, textStatus, jQxhr) {
+            let content = '';
+            content += "<tr>";
+            content += "<td>" + data.multipleChoicesQuestionScore + "</td>";
+            content += "<td>" + data.descriptiveQuestionScore + "</td>";
+            content += "<td>" + data.finalScore + "</td>";
+            content += "</tr>";
+            $('#myScore').html(content);
+        },
+        error: function (errorMessage) {
+            //alert(errorMessage)
+        }
+    });
+    $('#scoreExamModal').modal('show');
 }

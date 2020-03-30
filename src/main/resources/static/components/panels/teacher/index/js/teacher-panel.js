@@ -21,10 +21,18 @@ function loadPage(page) {
     if (page === 'teacher-question-bank') {
         $('#app-content-load').load('/components/panels/teacher/teacher-courses/question-management/add-question-to-exam-from-question-bank/add-question-to-exam-from-question-bank.html');
     }
+
+    if (page === 'student-exam-page') {
+        $('#app-content-load').load('/components/panels/teacher/teacher-courses/see-student-exam-page/see-student-exam-page.html');
+    }
+}
+
+function getRole(str) {
+    return str.split('&')[1].split('=')[1];
 }
 
 function getSecondPart(str) {
-    return str.split('?')[1];
+    return str.split('@')[1];
 }
 
 function getUsername(str) {
@@ -37,6 +45,8 @@ function getPassword(str) {
 
 // use the function:
 let url = getSecondPart(window.location.href);
+
 let decrypt = atob(url.replace('#', ''));
+window.loginRole = getRole(window.location.href);
 let usernameHeader = getUsername(decrypt);
 let passwordHeader = getPassword(decrypt);

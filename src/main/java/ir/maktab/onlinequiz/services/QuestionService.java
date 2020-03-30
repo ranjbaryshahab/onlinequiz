@@ -26,9 +26,10 @@ public interface QuestionService {
     @Secured("ROLE_TEACHER")
     void editQuestion(QuestionDTO questionDTO);
 
-    @Secured("ROLE_STUDENT")
-    List<DescriptiveQuestion> descriptiveQuestionPaginateStudent(Long examId);
+    @Secured({"ROLE_STUDENT","ROLE_TEACHER"})
+    List<DescriptiveQuestion> descriptiveQuestionPaginate(Long examId);
 
-    @Secured("ROLE_STUDENT")
-    List<MultipleChoiceQuestion> multipleChoiceQuestionPaginateStudent(Long examId);
+    @Secured({"ROLE_STUDENT","ROLE_TEACHER"})
+    List<MultipleChoiceQuestion> multipleChoiceQuestionPaginate(Long examId);
+
 }
